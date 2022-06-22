@@ -1,0 +1,7 @@
+<cdk-virtual-scroll-viewport #scroller itemSize="30" class="content">
+<mat-list>
+    <ng-container *cdkVirtualFor="let game of gameList">
+        <app-game-list-item [game]="game"></app-game-list-item>
+    </ng-container>
+</mat-list>
+</cdk-virtual-scroll-viewport>

@@ -1,0 +1,21 @@
+<mat-list-item>
+    <h3 matLine> {{game.steam_appid}} </h3>
+    <p matLine>
+      <span> {{game.name}} </span>
+      <span> {{game.required_age}} </span>
+      <span> {{game.metacritic_score}} </span>
+      <span> {{game.genres}} </span>
+    </p>
+    <button mat-icon-button [matMenuTriggerFor]="itemMenu">
+      <mat-icon>
+        more_vert
+      </mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+
+  <mat-menu #itemMenu="matMenu">
+    <button mat-menu-item>
+      Add favourite
+    </button>
+  </mat-menu>
