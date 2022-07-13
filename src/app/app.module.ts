@@ -10,16 +10,28 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainPageComponent } from './pages/main/main-page/main-page.component';
-import { GameListComponent } from './pages/main/components/game-list/game-list.component';
-import { GameListItemComponent } from './pages/main/components/game-list-item/game-list-item.component';
+import { GameListComponent } from './pages/search-page/components/game-list/game-list.component';
+import { GameListItemComponent } from './pages/search-page/components/game-list-item/game-list-item.component';
 import { HeaderComponent } from './pages/main/components/header/header.component';
 import { FeaturedGameGridComponent } from './pages/main/components/featured-game-grid/featured-game-grid.component';
 import { FeaturedGameGridItemComponent } from './pages/main/components/featured-game-grid-item/featured-game-grid-item.component';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { DrawerComponent } from './components/navigation-drawer/navigation-drawer.component';
+import { GameDataService } from './services/game-data.service';
+import { NavigationDrawerService } from './services/navigation-drawer.service';
+import { FilterDrawerService } from './services/filter-drawer.service';
+import { SearchService } from './services/search.service';
+import { LayoutModule } from '@angular/cdk/layout';
+import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +41,12 @@ import { FeaturedGameGridItemComponent } from './pages/main/components/featured-
     GameListItemComponent,
     HeaderComponent,
     FeaturedGameGridComponent,
-    FeaturedGameGridItemComponent
+    FeaturedGameGridItemComponent,
+    SearchPageComponent,
+    ToolbarComponent,
+    DrawerComponent,
+    FilterDrawerComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,
@@ -44,9 +61,12 @@ import { FeaturedGameGridItemComponent } from './pages/main/components/featured-
     MatIconModule,
     MatMenuModule,
     MatProgressSpinnerModule,
-    MatGridListModule
+    MatGridListModule,
+    MatCardModule,
+    MatSidenavModule,
+    LayoutModule
   ],
-  providers: [],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

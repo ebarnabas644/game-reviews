@@ -1,0 +1,14 @@
+<div (window:resize)="onResize($event)">
+
+    <cdk-virtual-scroll-viewport #scroller itemSize="{{rowHeight}}" class="cdk-viewport">
+        <ng-container *ngIf="gridList.length">
+            <mat-list class="content">
+                <ng-container *cdkVirtualFor="let items of gridList">
+                    <div #row>
+                        <app-game-list-item [games]="items"></app-game-list-item>
+                    </div>
+                </ng-container>
+            </mat-list>
+        </ng-container>
+    </cdk-virtual-scroll-viewport>
+</div>
