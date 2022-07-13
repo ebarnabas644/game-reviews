@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { AppDetail } from 'src/app/model/AppDetail';
 
 @Component({
@@ -7,12 +7,15 @@ import { AppDetail } from 'src/app/model/AppDetail';
   styleUrls: ['./game-list-item.component.scss']
 })
 export class GameListItemComponent implements OnInit {
-  @Input() game!: AppDetail;
-  
+  @Input() games!: AppDetail[];
+  screenHeight!: number
 
   constructor() { }
 
   ngOnInit(): void {
+    this.screenHeight = 10
   }
+
+
 
 }

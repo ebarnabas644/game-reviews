@@ -1,0 +1,21 @@
+<mat-toolbar>
+    <mat-toolbar-row *ngIf="isHomeView()">
+        <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleNavigationDrawer()" >menu</mat-icon>
+        <span>Steam game finder</span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="isSearchView()">
+        <div class="content">
+            <div class="center">
+                <div class="center">
+                    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleNavigationDrawer()" >menu</mat-icon>
+                    <span>Search</span>
+                </div>
+                <div class="center">
+                    <app-search-bar></app-search-bar>
+                </div>
+                <mat-icon class="filter-button" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleFilterDrawer()" >filter_list</mat-icon>
+            </div>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>

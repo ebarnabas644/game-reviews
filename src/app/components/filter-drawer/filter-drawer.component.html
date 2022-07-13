@@ -1,0 +1,20 @@
+<mat-drawer-container class="example-container" hasBackdrop="false">
+    <mat-drawer #drawer mode="over" position="end">
+      <div class="drawer">
+        <a routerLink="/">
+          <div class="drawer-destination">
+            A
+          </div>
+        </a>
+        <a routerLink="/search">
+          <div class="drawer-destination">
+            B
+          </div>
+        </a>
+    </div>
+    </mat-drawer>
+      <mat-drawer-content>
+          <ng-content></ng-content>
+      </mat-drawer-content>
+  </mat-drawer-container>
+  

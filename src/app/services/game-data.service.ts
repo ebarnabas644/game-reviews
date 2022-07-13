@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpClientModule, HttpParams } from '@angular/common/http'
+import { Observable, of } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
 import { DummyGenerator } from './testData';
@@ -12,6 +12,7 @@ export class GameDataService {
   private apiBaseUrl = "http://localhost:8080"
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
   private gameListPath = "/api/appList"
+  private gameDetailPath = "/api/detailList"
   //private gameListPath = "/GetAppList/v0002/?format=json"
   private dummyAppDetailList: AppDetail[] = []
 
@@ -24,7 +25,19 @@ export class GameDataService {
   getGameBaseData(): Observable<AppBase[]>{
     const buildUrl = this.apiBaseUrl + this.gameListPath
 
-    return this.http.get<AppBase[]>(buildUrl)
+    return this.http.get<AppBase[]>(buildUrl, {
+      params: { l: 'english' }
+    })
+  }
+
+  getGameDetailBatch(size: number, name: String): Observable<AppDetail[]>{
+    const buildUrl = this.apiBaseUrl + this.gameDetailPath
+    console.log("Getting game detail batch")
+    return this.http.get<AppDetail[]>(buildUrl+`/getBatch/0`, {
+      params: { l: 'english',
+                size: size,
+                name: `${name}` }
+    })
   }
 
   //Get featured game ids
@@ -37,8 +50,8 @@ export class GameDataService {
     return this.dummyAppDetailList[id]
   }
 
-  getDummyAppDetailList(): AppDetail[]{
-    return this.dummyAppDetailList
+  getDummyAppDetailList(): Observable<AppDetail[]>{
+    return of(this.dummyAppDetailList)
   }
 
   private initDummyAppDetailList(): AppDetail[]{

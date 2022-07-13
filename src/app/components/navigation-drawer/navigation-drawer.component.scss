@@ -1,0 +1,23 @@
+.drawer-destination{
+    padding: 10px 5vw;
+    font-size: x-large;
+    color: black;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+a:link {
+    text-decoration: none !important;
+}
+
+a:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.drawer-destination:hover{
+    background-color: rgb(209, 209, 209);
+}
+

@@ -1,0 +1,13 @@
+  <mat-list-item>
+  <div class="card" *ngFor="let game of games">
+    <a routerLink="/{{game.steam_appid}}">
+    <div>
+    <img src="{{game.header_image}}" class="headerImage">
+    </div>
+    <div>
+      {{game.name}}
+    </div>
+  </a>
+</div>
+</mat-list-item>
+
