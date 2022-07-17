@@ -36,6 +36,8 @@ export class GameListComponent implements OnInit {
       this.fetchMore()
       this.searchService.getAppName().subscribe(name => {
         this.currentSearchName = name
+        this.currentindex = 0
+        this.scroller.scrollToIndex(0)
         this.fetchMore()
       })
      //this.gameList = this.gameDataService.getDummyAppDetailList()
