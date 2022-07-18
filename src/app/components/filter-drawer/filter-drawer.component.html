@@ -1,5 +1,5 @@
-<mat-drawer-container class="example-container" hasBackdrop="false">
-    <mat-drawer #drawer mode="over" position="end">
+<mat-drawer-container class="example-container" [hasBackdrop]="!desktopMode">
+    <mat-drawer #drawer mode="side" position="end" [opened]="desktopMode">
       <div class="drawer">
         <a routerLink="/">
           <div class="drawer-destination">

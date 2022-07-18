@@ -32,6 +32,7 @@ import { SearchService } from './services/search.service';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { DesktopModeService } from './services/desktop-mode.service';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
     MatSidenavModule,
     LayoutModule
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

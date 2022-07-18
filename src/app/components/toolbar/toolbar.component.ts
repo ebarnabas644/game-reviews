@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
 
@@ -10,9 +11,9 @@ import { NavigationDrawerService } from 'src/app/services/navigation-drawer.serv
 })
 export class ToolbarComponent implements OnInit {
 
-  @Input() desktopMode = true
+  desktopMode = true
 
-  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router) { }
+  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService) { }
 
   toggleNavigationDrawer(): void{
     this.navigationDrawerService.toggle()
@@ -23,6 +24,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.desktopModeService
+      .getDesktopModeStatus()
+      .subscribe(mode => this.desktopMode = mode)
   }
 
   isHomeView() {

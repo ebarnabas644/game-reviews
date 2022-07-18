@@ -1,6 +1,6 @@
 <mat-toolbar>
     <mat-toolbar-row *ngIf="isHomeView()">
-        <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
         <span>Steam game finder</span>
     </mat-toolbar-row>
 
@@ -8,13 +8,15 @@
         <div class="content">
             <div class="center">
                 <div class="center">
-                    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+                    <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
                     <span>Search</span>
                 </div>
                 <div class="center">
                     <app-search-bar></app-search-bar>
                 </div>
-                <mat-icon class="filter-button" aria-hidden="false" aria-label="Example user verified icon" (click)="toggleFilterDrawer()" *ngIf="!desktopMode">filter_list</mat-icon>
+                <div class="center">
+                    <mat-icon class="filter-button" aria-hidden="false" (click)="toggleFilterDrawer()" *ngIf="!desktopMode">filter_list</mat-icon>
+                </div>
             </div>
         </div>
     </mat-toolbar-row>

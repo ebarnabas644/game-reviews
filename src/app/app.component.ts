@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DesktopModeService } from './services/desktop-mode.service';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,19 @@ export class AppComponent {
   desktopMode = true;
   desktopWidth = 900;
 
+  constructor(private desktopModeService: DesktopModeService){
+  }
+
   onResize(event: any) {
     this.checkDesktopMode()
   }
 
   checkDesktopMode(): void{
     if(window.innerWidth > this.desktopWidth){
-      this.desktopMode = true
+      this.desktopModeService.setDesktopModeStatus(true)
     }
     else{
-      this.desktopMode = false
+      this.desktopModeService.setDesktopModeStatus(false)
     }
   }
 }
