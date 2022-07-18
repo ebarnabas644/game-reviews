@@ -20,7 +20,7 @@ export class GameListComponent implements OnInit {
   @ViewChild('row') testHeight!: ElementRef
   rowHeight: number = 100
   cardPerRow: number = 1
-  cardSize: number = 200
+  cardSize: number = 240
   counter: number = 0
   gridList: AppDetail[][] = [];
   currentSearchName: String = ""
@@ -73,7 +73,7 @@ export class GameListComponent implements OnInit {
 
   onResize(event: any) {
     var temp = this.cardPerRow
-    this.cardPerRow = Math.floor((window.innerWidth / 2) / this.cardSize)
+    this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
     if(temp != this.cardPerRow){
       this.reFetch()
@@ -87,7 +87,7 @@ export class GameListComponent implements OnInit {
     var row: AppDetail[] = [];
     var temp: AppDetail[][] = []
     data.forEach(item => {
-      row.push(item)
+      row.push(this.removeInvalidCharacters(item))
       if(row.length == this.cardPerRow){
         temp.push(row)
         row = []
@@ -115,6 +115,12 @@ export class GameListComponent implements OnInit {
        this.fetchMore();
       });
     })
+  }
+
+  removeInvalidCharacters(data: AppDetail): AppDetail{
+    let filteredName = data.name.replace(/\?/g,'')
+    data.name = filteredName
+    return data
   }
 
 }

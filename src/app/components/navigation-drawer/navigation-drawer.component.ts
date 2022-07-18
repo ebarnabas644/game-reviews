@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
 
@@ -10,6 +10,8 @@ import { NavigationDrawerService } from 'src/app/services/navigation-drawer.serv
 export class DrawerComponent implements OnInit {
 
   @ViewChild('drawer') public sidenav!: MatSidenav;
+  desktopWidth = 900;
+  @Input() desktopMode = true
 
   constructor(private drawerService: NavigationDrawerService) {
    }

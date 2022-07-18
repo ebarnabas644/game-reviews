@@ -2,8 +2,14 @@
     height: auto;
     overflow: auto;
 }
+
 .cdk-viewport{
     height: 93vh;
     width: 70vw;
-    margin: 0 auto;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

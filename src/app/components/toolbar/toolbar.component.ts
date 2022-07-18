@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
@@ -9,6 +9,8 @@ import { NavigationDrawerService } from 'src/app/services/navigation-drawer.serv
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
+
+  @Input() desktopMode = true
 
   constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router) { }
 
