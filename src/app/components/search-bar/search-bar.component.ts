@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { SearchService } from 'src/app/services/search.service';
 
 @Component({
@@ -8,14 +8,21 @@ import { SearchService } from 'src/app/services/search.service';
 })
 export class SearchBarComponent implements OnInit {
 
+  searchValue = ""
 
   constructor(private searchService: SearchService) { }
 
   ngOnInit(): void {
   }
 
-  onSearch(name: String): void{
-    this.searchService.updateAppName(name)
+  onSearch(event: any): void{
+    this.searchValue = event.target.value
+    this.searchService.updateAppName(this.searchValue)
+  }
+
+  onClear(): void{
+    this.searchService.updateAppName("")
+    this.searchValue = ""
   }
 
 }

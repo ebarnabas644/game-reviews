@@ -21,11 +21,14 @@ a:hover{
     background-color: rgb(209, 209, 209);
 }
 
+.container{
+    height: 100%;
+}
+
 @media only screen and (max-width: 900px) {
     .drawer-destination{
         padding: 10px 40vw;
         font-size: x-large;
         color: black;
     }
-  }
-
+}

@@ -1,0 +1,46 @@
+.gallery-selector{
+    display: inline-flex;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    width: 60%;
+}
+
+.screenshot{
+    width: 20%;
+    margin-right: 5px;
+    border: 2px solid transparent
+}
+
+.screenshot:last-child{
+    margin-right: 0;
+}
+
+.screenshot.selected{
+    border: 2px solid blue
+}
+
+.selected-image{
+    width: 60%;
+}
+
+.outer-selected{
+    position: relative;
+    width: 60%;
+    height: 33.75vw;
+    overflow-x: hidden;
+}
+
+.inner-selected{
+    display: inline-flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s left;
+}
+
+.big-screenshot{
+}
+
+.description{
+    padding: 10px;
+}

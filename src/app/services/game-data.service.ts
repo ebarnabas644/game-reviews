@@ -40,6 +40,12 @@ export class GameDataService {
     })
   }
 
+  getGameDetail(appid: number): Observable<AppDetail>{
+    const buildUrl = this.apiBaseUrl + this.gameDetailPath
+    return this.http.get<AppDetail>(buildUrl+`/${appid}`, {
+      params: { l: 'english' }})
+  }
+
   //Get featured game ids
   getFeaturedGameIds(): number[]{
     return DummyGenerator.generateFeaturedGameIds()

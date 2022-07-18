@@ -33,6 +33,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { DesktopModeService } from './services/desktop-mode.service';
+import { DetailPageComponent } from './pages/detail-page/detail-page.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DesktopModeService } from './services/desktop-mode.service';
     ToolbarComponent,
     DrawerComponent,
     FilterDrawerComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    DetailPageComponent
   ],
   imports: [
     BrowserModule,

@@ -3,7 +3,7 @@ import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from '../../../../services/game-data.service'
 import { ViewChild } from '@angular/core'
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, pairwise, filter, throttleTime } from 'rxjs';
+import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { AppBase } from 'src/app/model/AppBase';
 import { SearchService } from 'src/app/services/search.service';
 
@@ -24,6 +24,9 @@ export class GameListComponent implements OnInit {
   counter: number = 0
   gridList: AppDetail[][] = [];
   currentSearchName: String = ""
+  private timeout: number = 500
+  private interval!: number
+  private firstStartUp: boolean = true
 
 
   constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService) { }
@@ -34,6 +37,7 @@ export class GameListComponent implements OnInit {
       .getGameDetailBatch(this.currentindex)
       .subscribe((games) => (this.gameList = games))*/
       this.fetchMore()
+
       this.searchService.getAppName().subscribe(name => {
         this.currentSearchName = name
         this.currentindex = 0
@@ -50,6 +54,20 @@ export class GameListComponent implements OnInit {
   }
 
   fetchMore(): void{
+    window.clearTimeout(this.timeout)
+
+    if(this.firstStartUp){
+      this.interval = 0
+      this.firstStartUp = false
+    }
+    else{
+      this.interval = 200
+    }
+    this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
+
+  }
+
+  fetchSubscribe(): void{
     this.currentindex += 50;
     this.gameDataService.getGameDetailBatch(this.currentindex, this.currentSearchName)
       .subscribe({
@@ -57,7 +75,6 @@ export class GameListComponent implements OnInit {
         error: (err) => console.log(err),
         complete: () => {
           this.updateRowHeight()}})
-      
   }
 
   resetSearch(){
@@ -93,6 +110,7 @@ export class GameListComponent implements OnInit {
         row = []
       }
     })
+    temp.push(row)
     this.gridList = [...temp]
   }
 
@@ -109,7 +127,7 @@ export class GameListComponent implements OnInit {
       map(() => this.scroller.measureScrollOffset('bottom')),
       pairwise(),
       filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-      throttleTime(200)
+      throttleTime(500)
     ).subscribe(() => {
       this.ngZone.run(() => {
        this.fetchMore();
