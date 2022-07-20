@@ -1,6 +1,6 @@
 <p>{{game.name}}</p>
 <div #outer class="outer-selected" (window:resize)="onResize($event)">
-    <div class="inner-selected" [ngStyle]="{'left': -offset + 'px'}">
+    <div class="inner-selected" [ngStyle]="{'margin-left': -offset + 'px'}">
         <img class="big-screenshot" *ngFor="let image of images" [ngClass]="image == selectedImage ? 'selected' : ''" src="{{image}}">
     </div>
 </div>
