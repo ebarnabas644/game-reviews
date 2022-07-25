@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DesktopModeService {
 
-  private desktopMode = new Subject<boolean>();
+  private desktopMode = new ReplaySubject<boolean>();
 
   public getDesktopModeStatus(): Observable<boolean>{
     return this.desktopMode.asObservable()
@@ -17,6 +17,5 @@ export class DesktopModeService {
   }
 
   constructor() {
-    this.desktopMode.next(true)
    }
 }
