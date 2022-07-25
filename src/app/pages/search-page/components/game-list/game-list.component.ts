@@ -3,7 +3,7 @@ import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from '../../../../services/game-data.service'
 import { ViewChild } from '@angular/core'
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, pairwise, filter, throttleTime } from 'rxjs';
+import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { AppBase } from 'src/app/model/AppBase';
 import { SearchService } from 'src/app/services/search.service';
 
@@ -20,10 +20,13 @@ export class GameListComponent implements OnInit {
   @ViewChild('row') testHeight!: ElementRef
   rowHeight: number = 100
   cardPerRow: number = 1
-  cardSize: number = 200
+  cardSize: number = 240
   counter: number = 0
   gridList: AppDetail[][] = [];
   currentSearchName: String = ""
+  private timeout: number = 500
+  private interval!: number
+  private firstStartUp: boolean = true
 
 
   constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService) { }
@@ -34,8 +37,11 @@ export class GameListComponent implements OnInit {
       .getGameDetailBatch(this.currentindex)
       .subscribe((games) => (this.gameList = games))*/
       this.fetchMore()
+
       this.searchService.getAppName().subscribe(name => {
         this.currentSearchName = name
+        this.currentindex = 0
+        this.scroller.scrollToIndex(0)
         this.fetchMore()
       })
      //this.gameList = this.gameDataService.getDummyAppDetailList()
@@ -48,6 +54,20 @@ export class GameListComponent implements OnInit {
   }
 
   fetchMore(): void{
+    window.clearTimeout(this.timeout)
+
+    if(this.firstStartUp){
+      this.interval = 0
+      this.firstStartUp = false
+    }
+    else{
+      this.interval = 200
+    }
+    this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
+
+  }
+
+  fetchSubscribe(): void{
     this.currentindex += 50;
     this.gameDataService.getGameDetailBatch(this.currentindex, this.currentSearchName)
       .subscribe({
@@ -55,7 +75,6 @@ export class GameListComponent implements OnInit {
         error: (err) => console.log(err),
         complete: () => {
           this.updateRowHeight()}})
-      
   }
 
   resetSearch(){
@@ -71,7 +90,7 @@ export class GameListComponent implements OnInit {
 
   onResize(event: any) {
     var temp = this.cardPerRow
-    this.cardPerRow = Math.floor((window.innerWidth / 2) / this.cardSize)
+    this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
     if(temp != this.cardPerRow){
       this.reFetch()
@@ -85,12 +104,13 @@ export class GameListComponent implements OnInit {
     var row: AppDetail[] = [];
     var temp: AppDetail[][] = []
     data.forEach(item => {
-      row.push(item)
+      row.push(this.removeInvalidCharacters(item))
       if(row.length == this.cardPerRow){
         temp.push(row)
         row = []
       }
     })
+    temp.push(row)
     this.gridList = [...temp]
   }
 
@@ -107,12 +127,18 @@ export class GameListComponent implements OnInit {
       map(() => this.scroller.measureScrollOffset('bottom')),
       pairwise(),
       filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-      throttleTime(200)
+      throttleTime(500)
     ).subscribe(() => {
       this.ngZone.run(() => {
        this.fetchMore();
       });
     })
+  }
+
+  removeInvalidCharacters(data: AppDetail): AppDetail{
+    let filteredName = data.name.replace(/\?/g,'')
+    data.name = filteredName
+    return data
   }
 
 }

@@ -1,5 +1,69 @@
-/* You can add global styles to this file, and also import other style files */
-@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@use '@angular/material' as mat;
+@use 'themes/palette-helper';
+@import 'themes/generate.scss';
+@import '@angular/material/theming';
+@include mat.core();
+
+$coal-palette: (
+ 50: #fafafa,
+ 100: #f5f5f5,
+ 200: #eeeeee,
+ 300: #e0e0e0,
+ 400: #bdbdbd,
+ 500: #9e9e9e,
+ 600: #757575,
+ 700: #616161,
+ 800: #424242,
+ 900: #212121,
+ contrast: (
+   50: black,
+   100: black,
+   200: black,
+   300: black,
+   400: black,
+   500: black,
+   600: white,
+   700: white,
+   800: white,
+   900: white
+ )
+);
+
+.custom-app-background {
+  background-color: black;
+}
+/*
+$primary-palette: mat.define-palette($coal-palette, 900);
+$accent-palette: mat.define-palette($coal-palette, 600);
+$warn-palette: mat.define-palette($coal-palette, 900);
+
+$my-theme2: mat.define-dark-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette
+  )
+));
+$my-theme2: palette-helper.modify-background($my-theme, black);
+$color: mat-color(map-get($my-theme2, primary));*/
+//@include mat.all-component-themes($my-theme);
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+ }
+
+.dark-theme {
+  @import "themes/dark-theme";
+  $my-theme: palette-helper.modify-background($dark-theme, black);
+  @include angular-material-theme($my-theme);
+  @include generate-theme-vars($my-theme);
+}
+
+.light-theme {
+  @import "themes/light-theme";
+  $my-theme: palette-helper.modify-background($light-theme, #e1f5fe);
+  @include angular-material-theme($my-theme);
+  @include generate-theme-vars($my-theme);
+}

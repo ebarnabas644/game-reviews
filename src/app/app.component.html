@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" (window:resize)="onResize($event)">
   <app-toolbar></app-toolbar>
   <app-drawer>
     <router-outlet></router-outlet>

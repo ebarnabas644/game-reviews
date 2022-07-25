@@ -7,7 +7,6 @@
 }
 
 div{
-    height: 100%;
   position: relative;
 }
 
@@ -16,4 +15,9 @@ div{
     justify-content: space-between;
     align-items: center;
     height: 100%;
-  }
+}
+
+mat-toolbar-row{
+  height: 64px;
+  background-color: var(--primary-color);
+}

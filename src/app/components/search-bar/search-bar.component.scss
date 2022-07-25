@@ -1,0 +1,35 @@
+button{
+    border-color: transparent;
+    background-color: transparent;
+}
+input{
+    border-radius: 15px;
+    border-style: none;
+    background-color: transparent;
+    height: 30px;
+    font-size: 20px;
+    padding: 5px;
+}
+input:focus{
+    outline-width: 0px;
+}
+
+.main{
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+mat-icon{
+    color: gray;
+}
+
+.search-icon{
+    padding-left: 10px;
+}
+
+.clear-icon{
+    padding-right: 10px;
+}

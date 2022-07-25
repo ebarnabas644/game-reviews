@@ -1,0 +1,24 @@
+<div class="highlight">
+    <div class="gallery">
+        <div #outer class="outer-selected" (window:resize)="onResize($event)">
+            <div class="inner-selected" [ngStyle]="{'margin-left': -offset + 'px'}">
+                <img #bigscreenshot class="big-screenshot" *ngFor="let image of images" [ngClass]="image === selectedImage ? 'selected' : ''" src="{{image}}">
+            </div>
+        </div>
+        <!--<img class="selected-image" src="{{selectedImage}}">-->
+        <div class="gallery-selector">
+            <img class="screenshot" *ngFor="let image of images" [ngClass]="image === selectedImage ? 'selected' : ''" src="{{image}}" (click)="setSelected(image)">
+        </div>
+    </div>
+    <div class="short-description">
+        {{game.short_description}}
+        <br>
+        {{game.developers}}
+        <br>
+        {{game.publishers}}
+    </div>
+</div>
+
+<div class="description" innerHTML="{{game.detailed_description}}"></div>
+
+

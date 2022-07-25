@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 
 @Component({
@@ -10,11 +11,15 @@ import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 export class FilterDrawerComponent implements OnInit {
 
   @ViewChild('drawer') public sidenav!: MatSidenav;
+  desktopMode = true;
 
-  constructor(private drawerService: FilterDrawerService) {
+  constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService) {
    }
 
   ngOnInit(): void {
+    this.desktopModeService
+      .getDesktopModeStatus()
+      .subscribe(mode => this.desktopMode = mode)
   }
 
   ngAfterViewInit(): void{

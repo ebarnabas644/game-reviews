@@ -1,9 +1,18 @@
 .content {
-    height: auto;
+    height: 100%;
     overflow: auto;
+    padding-bottom: 20px;
 }
+
 .cdk-viewport{
-    height: 93vh;
-    width: 70vw;
-    margin: 0 auto;
+    display: flex;
+    height: calc(100vh - 64px);
+    width: 100%;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
