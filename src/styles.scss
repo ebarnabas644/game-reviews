@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
-
-@import "@angular/material/theming";
-
+@use 'themes/palette-helper';
+@import 'themes/generate.scss';
+@import '@angular/material/theming';
 @include mat.core();
 
 $coal-palette: (
@@ -29,19 +29,41 @@ $coal-palette: (
  )
 );
 
-$my-primary: mat.define-palette($coal-palette, 50);
-$my-primaryVariant: mat.define-palette($coal-palette, 300);
-$my-accent: mat.define-palette($coal-palette, 900);
+.custom-app-background {
+  background-color: black;
+}
+/*
+$primary-palette: mat.define-palette($coal-palette, 900);
+$accent-palette: mat.define-palette($coal-palette, 600);
+$warn-palette: mat.define-palette($coal-palette, 900);
 
-$my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   primaryVariant: $my-primaryVariant,
-   accent: $my-accent
- )
+$my-theme2: mat.define-dark-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette
+  )
 ));
-
-@include mat.all-component-themes($my-theme);
+$my-theme2: palette-helper.modify-background($my-theme, black);
+$color: mat-color(map-get($my-theme2, primary));*/
+//@include mat.all-component-themes($my-theme);
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+ }
+
+.dark-theme {
+  @import "themes/dark-theme";
+  $my-theme: palette-helper.modify-background($dark-theme, black);
+  @include angular-material-theme($my-theme);
+  @include generate-theme-vars($my-theme);
+}
+
+.light-theme {
+  @import "themes/light-theme";
+  $my-theme: palette-helper.modify-background($light-theme, #e1f5fe);
+  @include angular-material-theme($my-theme);
+  @include generate-theme-vars($my-theme);
+}
