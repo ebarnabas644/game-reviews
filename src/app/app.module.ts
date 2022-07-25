@@ -35,6 +35,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { DesktopModeService } from './services/desktop-mode.service';
 import { DetailPageComponent } from './pages/detail-page/detail-page.component';
 import { ToolbarService } from './services/toolbar.service';
+import { ThemeService } from './services/theme.service';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,7 @@ import { ToolbarService } from './services/toolbar.service';
     MatSidenavModule,
     LayoutModule
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

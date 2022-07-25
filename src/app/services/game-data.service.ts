@@ -17,8 +17,6 @@ export class GameDataService {
   private dummyAppDetailList: AppDetail[] = []
 
   constructor(private http: HttpClient) {
-    this.initDummyAppDetailList()
-    console.log("Dummy database constructed successfully")
    }
   
 

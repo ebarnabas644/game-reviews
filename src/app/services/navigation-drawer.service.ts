@@ -23,7 +23,7 @@ export class NavigationDrawerService {
   }
 
   public toggle(): void {
-  this.sidenav.toggle();
+    this.sidenav.toggle();
  }
   constructor() { }
 }

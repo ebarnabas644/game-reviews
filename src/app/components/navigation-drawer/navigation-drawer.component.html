@@ -11,6 +11,10 @@
           <mat-icon>search</mat-icon>
         </div>
       </a>
+      <div class="drawer-destination float-down" (click)="toogleDarkMode()">
+        <mat-icon *ngIf="!darkMode">wb_sunny</mat-icon>
+        <mat-icon *ngIf="darkMode">brightness_2</mat-icon>
+      </div>
   </div>
   </mat-drawer>
     <mat-drawer-content>

@@ -12,7 +12,7 @@ import { ToolbarService } from 'src/app/services/toolbar.service';
 })
 export class ToolbarComponent implements OnInit {
 
-  desktopMode!: boolean
+  desktopMode = true
   title!: String
 
   constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService) { }
@@ -28,7 +28,9 @@ export class ToolbarComponent implements OnInit {
   ngOnInit(): void {
     this.desktopModeService
       .getDesktopModeStatus()
-      .subscribe(mode => this.desktopMode = mode)
+      .subscribe(mode => {
+        this.desktopMode = mode
+      })
       this.toolbarService.getTitle().subscribe(title => this.title = title)
   }
 
