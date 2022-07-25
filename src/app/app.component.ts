@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DesktopModeService } from './services/desktop-mode.service';
 
 @Component({
@@ -6,12 +6,15 @@ import { DesktopModeService } from './services/desktop-mode.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'game-reviews';
-  desktopMode = true;
   desktopWidth = 900;
 
   constructor(private desktopModeService: DesktopModeService){
+  }
+
+  ngOnInit(): void{
+    this.checkDesktopMode()
   }
 
   onResize(event: any) {
