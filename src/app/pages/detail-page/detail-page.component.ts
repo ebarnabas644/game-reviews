@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from 'src/app/services/game-data.service';
+import { ToolbarService } from 'src/app/services/toolbar.service';
 
 @Component({
   selector: 'app-detail-page',
@@ -17,8 +18,9 @@ export class DetailPageComponent implements OnInit {
   selectedImage!: string
   offset: number = 0
   @ViewChild('outer') outer!: ElementRef
+  @ViewChildren('bigscreenshot') bigScreenshot!: QueryList<ElementRef>
 
-  constructor(private route: ActivatedRoute, private gameDataService: GameDataService) { }
+  constructor(private route: ActivatedRoute, private gameDataService: GameDataService, private toolbarService: ToolbarService) { }
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
@@ -33,7 +35,7 @@ export class DetailPageComponent implements OnInit {
       this.game = this.removeInvalidCharacters(game)
       this.images = this.game.screenshots_full.split(',')
       this.selectedImage = this.images[0]
-      console.log(this.images)
+      this.updateTitle()
     }
       )
   }
@@ -48,8 +50,9 @@ export class DetailPageComponent implements OnInit {
     this.selectedImage = selected
     let index = this.images.indexOf(this.selectedImage)
     this.offset = 0
+    let imageElementArray = this.bigScreenshot.toArray()
     for (let i = 0; i < index; i++) {
-       this.offset += document.querySelector(`.big-screenshot[src='${this.images[i]}']`)!.clientWidth
+       this.offset += imageElementArray[i].nativeElement.clientWidth
     }
     
     
@@ -57,6 +60,11 @@ export class DetailPageComponent implements OnInit {
 
   onResize(event: any){
 
+  }
+
+  updateTitle(): void{
+    this.toolbarService.updateTitle(this.game.name)
+    console.log("updated")
   }
 
 }

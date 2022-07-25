@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
+import { ToolbarService } from 'src/app/services/toolbar.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,9 +12,10 @@ import { NavigationDrawerService } from 'src/app/services/navigation-drawer.serv
 })
 export class ToolbarComponent implements OnInit {
 
-  desktopMode = true
+  desktopMode!: boolean
+  title!: String
 
-  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService) { }
+  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService) { }
 
   toggleNavigationDrawer(): void{
     this.navigationDrawerService.toggle()
@@ -27,16 +29,19 @@ export class ToolbarComponent implements OnInit {
     this.desktopModeService
       .getDesktopModeStatus()
       .subscribe(mode => this.desktopMode = mode)
+      this.toolbarService.getTitle().subscribe(title => this.title = title)
   }
 
   isHomeView() {
-    // return true if the current page is home
     return this.router.url.match('^/$');
   }
 
   isSearchView() {
-    // return true if the current page is login
     return this.router.url.match('^/search$');
+  }
+
+  isGameView(){
+    return this.router.url.match('^/search/.*$');
   }
 
 }

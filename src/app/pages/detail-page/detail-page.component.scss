@@ -2,7 +2,7 @@
     display: inline-flex;
     overflow-y: hidden;
     overflow-x: scroll;
-    width: 60%;
+    width: 100%;
 }
 
 .screenshot{
@@ -19,13 +19,9 @@
     border: 2px solid blue
 }
 
-.selected-image{
-    width: 60%;
-}
-
 .outer-selected{
     position: relative;
-    width: 60%;
+    width: 100%;
     overflow-x: hidden;
 }
 
@@ -42,4 +38,20 @@
 
 .description{
     padding: 15px;
+}
+
+.highlight{
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.gallery{
+    width: 500px;
+    //flex-grow: 2;
+}
+
+.short-description{
+    width: 50%;
+    //flex-grow: 1;
 }
