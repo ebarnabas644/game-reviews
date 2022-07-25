@@ -18,13 +18,13 @@ export class DrawerComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.desktopModeService
-      .getDesktopModeStatus()
-      .subscribe(mode => this.desktopMode = mode)
-  }
-
-  ngAfterViewInit(): void{
     this.drawerService.setSidenav(this.sidenav)
+    this.desktopModeService
+    .getDesktopModeStatus()
+    .subscribe(mode => {
+      this.desktopMode = mode
+      console.log("Desktop mode: "+mode)
+    })
   }
 
 }
