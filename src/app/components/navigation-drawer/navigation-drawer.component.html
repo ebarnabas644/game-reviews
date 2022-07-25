@@ -1,14 +1,14 @@
 <mat-drawer-container class="container" [hasBackdrop]="!desktopMode">
-  <mat-drawer #drawer mode="side" position="start" [opened]="desktopMode">
+  <mat-drawer class="full-drawer" #drawer mode="side" position="start" [opened]="desktopMode">
     <div class="drawer">
       <a routerLink="/">
         <div class="drawer-destination">
-          Home
+          <mat-icon>home</mat-icon>
         </div>
       </a>
       <a routerLink="/search">
         <div class="drawer-destination">
-          Search
+          <mat-icon>search</mat-icon>
         </div>
       </a>
   </div>
