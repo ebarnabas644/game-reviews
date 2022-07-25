@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
     <mat-toolbar-row *ngIf="isHomeView()">
         <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
         <span>Steam game finder</span>
@@ -19,5 +19,9 @@
                 </div>
             </div>
         </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row *ngIf="isGameView()">
+        <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span>{{title}}</span>
     </mat-toolbar-row>
 </mat-toolbar>
