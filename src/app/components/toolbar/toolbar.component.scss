@@ -20,4 +20,5 @@ div{
 mat-toolbar-row{
   height: 64px;
   background-color: var(--primary-color);
+  transition: background-color 0.5s ease;
 }

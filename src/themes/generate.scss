@@ -29,7 +29,7 @@
   $app-bar: mat-color($background-palette, app-bar);
   $background: mat-color($background-palette, background);
   $hover: mat-color($background-palette, hover);
-  $card: mat-color($background-palette, card);
+  $card: mat-color(map-get($theme, primary), extra-light);
   $dialog: mat-color($background-palette, dialog);
   $disabled-button: mat-color($background-palette, disabled-button);
   $raised-button: mat-color($background-palette, raised-button);

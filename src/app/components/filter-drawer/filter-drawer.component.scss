@@ -1,17 +1,30 @@
 .drawer-destination{
     padding: 10px 5vw;
     font-size: x-large;
-    color: black;
+    color: var(--text-color);
+}
+
+a{
+    text-decoration: none !important;
+}
+
+a:link {
+    text-decoration: none !important;
+}
+
+a:hover{
+    text-decoration: none;
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 900px) {
     .drawer-destination{
         padding: 10px 40vw;
         font-size: x-large;
-        color: black;
     }
   }
 
 .full-drawer{
     background-color: var(--accent-color);
+    transition: background-color 0.5s ease;
 }

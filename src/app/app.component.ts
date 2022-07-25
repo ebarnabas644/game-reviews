@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DesktopModeService } from './services/desktop-mode.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,16 @@ import { DesktopModeService } from './services/desktop-mode.service';
 export class AppComponent implements OnInit{
   title = 'game-reviews';
   desktopWidth = 900;
+  darkMode = false
 
-  constructor(private desktopModeService: DesktopModeService){
+  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService){
   }
 
   ngOnInit(): void{
+    this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
+  }
+
+  ngAfterViewInit(): void{
     this.checkDesktopMode()
   }
 
@@ -24,9 +30,11 @@ export class AppComponent implements OnInit{
   checkDesktopMode(): void{
     if(window.innerWidth > this.desktopWidth){
       this.desktopModeService.setDesktopModeStatus(true)
+      console.log("Global desktop status set: true")
     }
     else{
       this.desktopModeService.setDesktopModeStatus(false)
+      console.log("Global desktop status set: false")
     }
   }
 }

@@ -9,6 +9,7 @@ input{
     height: 30px;
     font-size: 20px;
     padding: 5px;
+    color: var(--text-color);;
 }
 input:focus{
     outline-width: 0px;
@@ -16,14 +17,15 @@ input:focus{
 
 .main{
     border-style: solid;
-    border-color: lightgray;
+    border-width: 1px;
+    border-color: var(--text-color);
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 mat-icon{
-    color: gray;
+    color: var(--text-color);
 }
 
 .search-icon{

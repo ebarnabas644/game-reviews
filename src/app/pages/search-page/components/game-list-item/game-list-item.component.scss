@@ -6,11 +6,11 @@
 
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 15px;
+    border-radius: 5px;
     transition: 0.5s ease;
     text-align: center;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    background-color: var(--accent-color);
+    background-color: var(--card-color);
 }
 
 .content {
@@ -23,8 +23,8 @@
 }
 
 .image{
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     width: 100%;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .card-text .text {
-    color: black;
+    color: var(--text-color);
 }
 
 .card-stats {
@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: black;
+    color: var(--text-color);
   }
 
 .card:hover {
