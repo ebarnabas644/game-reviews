@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders, HttpClientModule, HttpParams } from '@angular/
 import { Observable, of } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
+import { AppCategory } from '../model/AppCategory';
+import { AppGenre } from '../model/AppGenre';
+import { AppLanguage } from '../model/AppLanguage';
 import { DummyGenerator } from './testData';
 
 @Injectable({
@@ -13,6 +16,9 @@ export class GameDataService {
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
   private gameListPath = "/api/appList"
   private gameDetailPath = "/api/detailList"
+  private gameGenreListPath = "/api/genreList/"
+  private gameLanguageListPath = "/api/languageList/"
+  private gameCategoryListPath = "/api/categoryList/"
   //private gameListPath = "/GetAppList/v0002/?format=json"
   private dummyAppDetailList: AppDetail[] = []
 
@@ -22,19 +28,49 @@ export class GameDataService {
 
   getGameBaseData(): Observable<AppBase[]>{
     const buildUrl = this.apiBaseUrl + this.gameListPath
-
     return this.http.get<AppBase[]>(buildUrl, {
       params: { l: 'english' }
     })
   }
 
-  getGameDetailBatch(size: number, name: String): Observable<AppDetail[]>{
+  getGameDetailBatch(
+    { size,
+      name,
+      supportedLanguages = "",
+      windows = -1,
+      mac = -1,
+      linux = -1,
+      min_metacritic_score = -1,
+      coming_soon = -1,
+      genres = "",
+      categories = ""
+    }:
+    { size: number,
+      name: string,
+      supportedLanguages?: string,
+      windows?: number,
+      mac?: number,
+      linux?: number,
+      min_metacritic_score?: number,
+      coming_soon?: number,
+      genres?: string,
+      categories?: string
+    }): Observable<AppDetail[]>{
     const buildUrl = this.apiBaseUrl + this.gameDetailPath
     console.log("Getting game detail batch")
     return this.http.get<AppDetail[]>(buildUrl+`/getBatch/0`, {
       params: { l: 'english',
                 size: size,
-                name: `${name}` }
+                name: `${name}`,
+                supportedLanguages: `${supportedLanguages}`,
+                windows: windows == -1 ? "" : windows,
+                mac: mac == -1 ? "" : mac,
+                linux: linux == -1 ? "" : linux,
+                min_metacritic_score: min_metacritic_score == -1 ? "" : min_metacritic_score,
+                coming_soon: coming_soon == -1 ? "" : coming_soon,
+                genres: genres,
+                categories: categories
+                 }
     })
   }
 
@@ -42,6 +78,27 @@ export class GameDataService {
     const buildUrl = this.apiBaseUrl + this.gameDetailPath
     return this.http.get<AppDetail>(buildUrl+`/${appid}`, {
       params: { l: 'english' }})
+  }
+
+  getGameLanguages(): Observable<AppLanguage[]>{
+    const buildUrl = this.apiBaseUrl + this.gameLanguageListPath
+    return this.http.get<AppLanguage[]>(buildUrl, {
+      params: { l: 'english'}
+    })
+  }
+
+  getGameGenres(): Observable<AppGenre[]>{
+    const buildUrl = this.apiBaseUrl + this.gameGenreListPath
+    return this.http.get<AppGenre[]>(buildUrl, {
+      params: { l: 'english'}
+    })
+  }
+
+  getGameCategories(): Observable<AppCategory[]>{
+    const buildUrl = this.apiBaseUrl + this.gameCategoryListPath
+    return this.http.get<AppCategory[]>(buildUrl, {
+      params: { l: 'english'}
+    })
   }
 
   //Get featured game ids
