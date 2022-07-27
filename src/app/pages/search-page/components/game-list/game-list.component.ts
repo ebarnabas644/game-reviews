@@ -18,12 +18,12 @@ export class GameListComponent implements OnInit {
   newData: AppDetail[] = []
   @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
   @ViewChild('row') testHeight!: ElementRef
-  rowHeight: number = 100
+  rowHeight: number = 315
   cardPerRow: number = 1
   cardSize: number = 240
   counter: number = 0
   gridList: AppDetail[][] = [];
-  currentSearchName: String = ""
+  currentSearchName: string = ""
   private timeout: number = 500
   private interval!: number
   private firstStartUp: boolean = true
@@ -51,6 +51,7 @@ export class GameListComponent implements OnInit {
 
   ngAfterViewInit(): void{
     this.setupScroller()
+    this.updateRowHeight()
   }
 
   fetchMore(): void{
@@ -69,12 +70,12 @@ export class GameListComponent implements OnInit {
 
   fetchSubscribe(): void{
     this.currentindex += 50;
-    this.gameDataService.getGameDetailBatch(this.currentindex, this.currentSearchName)
+    this.gameDataService.getGameDetailBatch({ size: this.currentindex, name: this.currentSearchName })
       .subscribe({
         next: (data) => this.splitDataIntoGrid(data),
         error: (err) => console.log(err),
         complete: () => {
-          this.updateRowHeight()}})
+          }})
   }
 
   resetSearch(){
@@ -119,6 +120,9 @@ export class GameListComponent implements OnInit {
       this.rowHeight = this.testHeight.nativeElement.offsetHeight
       this.cdr.detectChanges()
       console.log(this.rowHeight)
+    }
+    else{
+      console.log("No row height avaiable")
     }
   }
 
