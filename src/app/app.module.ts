@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,6 +37,8 @@ import { DesktopModeService } from './services/desktop-mode.service';
 import { DetailPageComponent } from './pages/detail-page/detail-page.component';
 import { ToolbarService } from './services/toolbar.service';
 import { ThemeService } from './services/theme.service';
+import { FilterService } from './services/filter.service';
+import { FilterOptionComponent } from './components/filter-drawer/components/filter-option/filter-option.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +54,8 @@ import { ThemeService } from './services/theme.service';
     DrawerComponent,
     FilterDrawerComponent,
     SearchBarComponent,
-    DetailPageComponent
+    DetailPageComponent,
+    FilterOptionComponent
   ],
   imports: [
     BrowserModule,
@@ -69,9 +73,10 @@ import { ThemeService } from './services/theme.service';
     MatGridListModule,
     MatCardModule,
     MatSidenavModule,
-    LayoutModule
+    LayoutModule,
+    MatCheckboxModule
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
