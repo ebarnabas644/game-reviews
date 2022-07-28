@@ -1,19 +1,12 @@
-<mat-drawer-container class="example-container" [hasBackdrop]="!desktopMode">
+<mat-drawer-container [hasBackdrop]="!desktopMode">
     <mat-drawer class="full-drawer" #drawer mode="side" position="end" [opened]="desktopMode">
       <div class="drawer">
-        <a routerLink="/">
-          <div class="drawer-destination">
-            A
-          </div>
-        </a>
-        <a routerLink="/search">
-          <div class="drawer-destination">
-            B
-          </div>
-        </a>
+        <h2>Filter options</h2>
+        <app-filter-option title="Genres" [items]="genres" (onSelect)="onGenreChange($event.target)"></app-filter-option>
+        <app-filter-option title="Categories" [items]="categories" (onSelect)="onCategoryChange($event.target)"></app-filter-option>
     </div>
     </mat-drawer>
-      <mat-drawer-content>
+      <mat-drawer-content class="content">
           <ng-content></ng-content>
       </mat-drawer-content>
   </mat-drawer-container>

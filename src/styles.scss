@@ -63,7 +63,7 @@ body {
 
 .light-theme {
   @import "themes/light-theme";
-  $my-theme: palette-helper.modify-background($light-theme, #ffffff);
+  $my-theme: palette-helper.modify-background($light-theme, white);
   @include angular-material-theme($my-theme);
   @include generate-theme-vars($my-theme);
 }
@@ -75,7 +75,8 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--background-color);
+  background-color: var(--background-color);
+  transition: background-color 0.5s ease;
 }
 
 /* Handle */
@@ -86,4 +87,8 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.mat-drawer-container{
+  transition: background-color 0.5s ease;
 }

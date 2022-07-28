@@ -6,13 +6,13 @@ import { Subject, Observable } from 'rxjs';
 })
 export class SearchService {
 
-  private appName = new Subject<String>();
+  private appName = new Subject<string>();
 
-  public getAppName(): Observable<String>{
+  public getAppName(): Observable<string>{
     return this.appName.asObservable()
   }
 
-  public updateAppName(newAppName: String): void{
+  public updateAppName(newAppName: string): void{
     this.appName.next(newAppName)
   }
 

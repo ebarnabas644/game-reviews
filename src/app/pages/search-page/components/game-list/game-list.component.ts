@@ -6,6 +6,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { AppBase } from 'src/app/model/AppBase';
 import { SearchService } from 'src/app/services/search.service';
+import { FilterService } from 'src/app/services/filter.service';
+import { AppOther } from 'src/app/model/AppOther';
 
 @Component({
   selector: 'app-game-list',
@@ -18,39 +20,80 @@ export class GameListComponent implements OnInit {
   newData: AppDetail[] = []
   @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
   @ViewChild('row') testHeight!: ElementRef
-  rowHeight: number = 100
+  rowHeight: number = 315
   cardPerRow: number = 1
   cardSize: number = 240
   counter: number = 0
   gridList: AppDetail[][] = [];
-  currentSearchName: String = ""
+  currentSearchName: string = ""
   private timeout: number = 500
   private interval!: number
   private firstStartUp: boolean = true
+  genresFilter: string = ""
+  categoryFilter: string = ""
 
 
-  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService) { }
+  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService) { }
 
   ngOnInit(): void {
-  
-    /*this.gameDataService
-      .getGameDetailBatch(this.currentindex)
-      .subscribe((games) => (this.gameList = games))*/
-      this.fetchMore()
+    this.fetchMore()
+    this.searchSubscription();
+    this.genreFilterSubscription();
+    this.categoryFilterSubscription();
+    this.onResize();
+    console.log(this.cardPerRow)
+  }
 
-      this.searchService.getAppName().subscribe(name => {
-        this.currentSearchName = name
-        this.currentindex = 0
-        this.scroller.scrollToIndex(0)
-        this.fetchMore()
-      })
-     //this.gameList = this.gameDataService.getDummyAppDetailList()
-     this.cardPerRow = Math.floor((window.innerWidth * 0.5) / this.cardSize)
-      console.log(this.cardPerRow)
+  private searchSubscription(){
+    this.searchService.getAppName().subscribe(name => {
+      this.currentSearchName = name
+      this.fetchMore()
+      this.resetScroller()
+    })
+  }
+
+  private genreFilterSubscription() {
+    this.filterService.getGenres().subscribe(genres => {
+      this.genresFilter = this.convertArrayToString(genres)
+      this.fetchMore();
+      this.resetScroller();
+    });
+  }
+
+  private categoryFilterSubscription() {
+    this.filterService.getCategories().subscribe(categories => {
+      this.categoryFilter = this.convertArrayToString(categories)
+      this.fetchMore();
+      this.resetScroller();
+    });
+  }
+
+  private windowsFilterSubscription(){
+
+  }
+
+  private macFilterSubscription(){
+    
+  }
+
+  private linuxFilterSubscription(){
+    
+  }
+
+  private comingsoonFilterSubscription(){
+    
+  }
+
+  private convertArrayToString(array: AppOther[]): string{
+    var converted: string = ""
+    array.forEach(item => converted += item.value + ",");
+      converted = converted.substring(0, converted.length - 1);
+    return converted
   }
 
   ngAfterViewInit(): void{
     this.setupScroller()
+    this.updateRowHeight()
   }
 
   fetchMore(): void{
@@ -69,18 +112,23 @@ export class GameListComponent implements OnInit {
 
   fetchSubscribe(): void{
     this.currentindex += 50;
-    this.gameDataService.getGameDetailBatch(this.currentindex, this.currentSearchName)
+    this.gameDataService.getGameDetailBatch({ size: this.currentindex, name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter })
       .subscribe({
         next: (data) => this.splitDataIntoGrid(data),
         error: (err) => console.log(err),
         complete: () => {
-          this.updateRowHeight()}})
+          }})
   }
 
   resetSearch(){
-    this.currentindex = 0
+    this.resetScroller()
     this.currentSearchName = ""
     this.fetchMore()
+  }
+
+  resetScroller(){
+    this.currentindex = 0;
+    this.scroller.scrollToIndex(0);
   }
 
   reFetch(): void{
@@ -88,7 +136,7 @@ export class GameListComponent implements OnInit {
     this.splitDataIntoGrid(this.gameListCache)
   }
 
-  onResize(event: any) {
+  onResize() {
     var temp = this.cardPerRow
     this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
@@ -119,6 +167,9 @@ export class GameListComponent implements OnInit {
       this.rowHeight = this.testHeight.nativeElement.offsetHeight
       this.cdr.detectChanges()
       console.log(this.rowHeight)
+    }
+    else{
+      console.log("No row height avaiable")
     }
   }
 

@@ -1,0 +1,47 @@
+.options{
+    overflow: scroll;
+    overflow-x: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease;
+}
+
+.opened{
+    height: 400px;
+    opacity: 1;
+}
+
+.closed{
+    //visibility: hidden;
+    opacity: 0;
+    height: 0;
+}
+
+.icon{
+    transition: transform 0.2s ease;
+}
+
+.opened-icon{
+    transform: rotate(90deg);
+}
+
+.closed-icon{
+    transform: rotate(0deg);
+}
+
+.title{
+    display: flex;
+    align-items: center;
+    font-size: large;
+}
+
+.title:hover{
+    text-decoration: underline;
+}
+
+.content{
+    background-color: var(--background-color);
+    transition: background-color 0.5s ease;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.2em;
+    cursor: pointer;
+}
