@@ -22,9 +22,17 @@ a:hover{
         padding: 10px 40vw;
         font-size: x-large;
     }
+    .content{
+        width: 100% !important;
+    }
   }
 
 .full-drawer{
     background-color: var(--accent-color);
     transition: background-color 0.5s ease;
+    width: 250px;
+}
+
+.content{
+    width: calc(100% - 250px);
 }
