@@ -3,10 +3,8 @@ import { HttpClient, HttpHeaders, HttpClientModule, HttpParams } from '@angular/
 import { Observable, of } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
-import { AppCategory } from '../model/AppCategory';
-import { AppGenre } from '../model/AppGenre';
-import { AppLanguage } from '../model/AppLanguage';
 import { DummyGenerator } from './testData';
+import { AppOther } from '../model/AppOther';
 
 @Injectable({
   providedIn: 'root'
@@ -80,23 +78,23 @@ export class GameDataService {
       params: { l: 'english' }})
   }
 
-  getGameLanguages(): Observable<AppLanguage[]>{
+  getGameLanguages(): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameLanguageListPath
-    return this.http.get<AppLanguage[]>(buildUrl, {
+    return this.http.get<AppOther[]>(buildUrl, {
       params: { l: 'english'}
     })
   }
 
-  getGameGenres(): Observable<AppGenre[]>{
+  getGameGenres(): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameGenreListPath
-    return this.http.get<AppGenre[]>(buildUrl, {
+    return this.http.get<AppOther[]>(buildUrl, {
       params: { l: 'english'}
     })
   }
 
-  getGameCategories(): Observable<AppCategory[]>{
+  getGameCategories(): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameCategoryListPath
-    return this.http.get<AppCategory[]>(buildUrl, {
+    return this.http.get<AppOther[]>(buildUrl, {
       params: { l: 'english'}
     })
   }
