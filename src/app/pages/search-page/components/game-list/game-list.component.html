@@ -1,4 +1,4 @@
-<div (window:resize)="onResize($event)" class="box">
+<div (window:resize)="onResize()" class="box">
     <cdk-virtual-scroll-viewport #scroller itemSize="{{rowHeight}}" class="cdk-viewport">
         <ng-container *ngIf="gridList.length">
             <mat-list class="content">
