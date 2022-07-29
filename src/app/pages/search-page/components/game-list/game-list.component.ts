@@ -15,7 +15,6 @@ import { AppOther } from 'src/app/model/AppOther';
   styleUrls: ['./game-list.component.scss']
 })
 export class GameListComponent implements OnInit {
-  currentindex = 0
   gameListCache: AppDetail[] = []
   newData: AppDetail[] = []
   @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
@@ -36,7 +35,8 @@ export class GameListComponent implements OnInit {
   constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService) { }
 
   ngOnInit(): void {
-    this.fetchMore()
+    this.gameDataService.resetBatchIndex()
+    this.fetchData()
     this.searchSubscription();
     this.genreFilterSubscription();
     this.categoryFilterSubscription();
@@ -44,27 +44,71 @@ export class GameListComponent implements OnInit {
     console.log(this.cardPerRow)
   }
 
+  
+  fetchData(): void{
+    window.clearTimeout(this.timeout)
+
+    if(this.firstStartUp){
+      this.interval = 0
+      this.firstStartUp = false
+    }
+    else{
+      this.interval = 200
+    }
+    this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
+
+  }
+
+  fetchSubscribe(): void{
+    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter })
+      .subscribe({
+        next: (data) => this.fillCache(data),
+        error: (err) => console.log(err),
+        complete: () => {
+          }})
+  }
+
+  fillCache(data: AppDetail[]): void{
+    console.log(data)
+    data.forEach(item => this.gameListCache.push(item))
+    this.splitDataIntoGrid()
+  }
+
+  splitDataIntoGrid(): void{
+    var row: AppDetail[] = []
+    var temp: AppDetail[][] = []
+    this.gameListCache.forEach(item => {
+      row.push(this.removeInvalidCharacters(item))
+      if(row.length == this.cardPerRow){
+        temp.push(row)
+        row = []
+      }
+    })
+    temp.push(row)
+    this.gridList = [...temp]
+  }
+
   private searchSubscription(){
     this.searchService.getAppName().subscribe(name => {
       this.currentSearchName = name
-      this.fetchMore()
       this.resetScroller()
+      this.fetchData()
     })
   }
 
   private genreFilterSubscription() {
     this.filterService.getGenres().subscribe(genres => {
       this.genresFilter = this.convertArrayToString(genres)
-      this.fetchMore();
       this.resetScroller();
+      this.fetchData();
     });
   }
 
   private categoryFilterSubscription() {
     this.filterService.getCategories().subscribe(categories => {
       this.categoryFilter = this.convertArrayToString(categories)
-      this.fetchMore();
       this.resetScroller();
+      this.fetchData();
     });
   }
 
@@ -96,44 +140,17 @@ export class GameListComponent implements OnInit {
     this.updateRowHeight()
   }
 
-  fetchMore(): void{
-    window.clearTimeout(this.timeout)
-
-    if(this.firstStartUp){
-      this.interval = 0
-      this.firstStartUp = false
-    }
-    else{
-      this.interval = 200
-    }
-    this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
-
-  }
-
-  fetchSubscribe(): void{
-    this.currentindex += 50;
-    this.gameDataService.getGameDetailBatch({ size: this.currentindex, name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter })
-      .subscribe({
-        next: (data) => this.splitDataIntoGrid(data),
-        error: (err) => console.log(err),
-        complete: () => {
-          }})
-  }
 
   resetSearch(){
     this.resetScroller()
     this.currentSearchName = ""
-    this.fetchMore()
+    this.fetchData()
   }
 
   resetScroller(){
-    this.currentindex = 0;
     this.scroller.scrollToIndex(0);
-  }
-
-  reFetch(): void{
-    var row: AppDetail[] = [];
-    this.splitDataIntoGrid(this.gameListCache)
+    this.gameDataService.resetBatchIndex()
+    this.gameListCache = []
   }
 
   onResize() {
@@ -141,25 +158,10 @@ export class GameListComponent implements OnInit {
     this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
     if(temp != this.cardPerRow){
-      this.reFetch()
+      this.splitDataIntoGrid()
     }
 
     this.updateRowHeight()
-  }
-
-  splitDataIntoGrid(data: AppDetail[]): void{
-    this.gameListCache = data
-    var row: AppDetail[] = [];
-    var temp: AppDetail[][] = []
-    data.forEach(item => {
-      row.push(this.removeInvalidCharacters(item))
-      if(row.length == this.cardPerRow){
-        temp.push(row)
-        row = []
-      }
-    })
-    temp.push(row)
-    this.gridList = [...temp]
   }
 
   updateRowHeight(): void{
@@ -181,7 +183,7 @@ export class GameListComponent implements OnInit {
       throttleTime(500)
     ).subscribe(() => {
       this.ngZone.run(() => {
-       this.fetchMore();
+       this.fetchData();
       });
     })
   }

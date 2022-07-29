@@ -22,6 +22,8 @@ export class FilterDrawerComponent implements OnInit {
   selectedGenres: AppOther[] = []
   categories!: AppOther[]
   selectedCategories: AppOther[] = []
+  operatingSystems: string[] = []
+  selectedOperatingSystems: string[] = []
 
   constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService, private filterService: FilterService, private gameDataService: GameDataService) {
    }

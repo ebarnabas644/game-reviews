@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpClientModule, HttpParams } from '@angular/common/http'
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
-import { DummyGenerator } from './testData';
 import { AppOther } from '../model/AppOther';
 
+const batchSize = 30;
 @Injectable({
   providedIn: 'root'
 })
@@ -17,12 +17,17 @@ export class GameDataService {
   private gameGenreListPath = "/api/genreList/"
   private gameLanguageListPath = "/api/languageList/"
   private gameCategoryListPath = "/api/categoryList/"
+  private gameFeaturedPath = "/api/featured/"
   //private gameListPath = "/GetAppList/v0002/?format=json"
-  private dummyAppDetailList: AppDetail[] = []
+  private currentIndex = -batchSize
+  
 
   constructor(private http: HttpClient) {
    }
-  
+
+   resetBatchIndex(){
+    this.currentIndex = -batchSize
+   }
 
   getGameBaseData(): Observable<AppBase[]>{
     const buildUrl = this.apiBaseUrl + this.gameListPath
@@ -32,8 +37,7 @@ export class GameDataService {
   }
 
   getGameDetailBatch(
-    { size,
-      name,
+    { name,
       supportedLanguages = "",
       windows = -1,
       mac = -1,
@@ -43,8 +47,7 @@ export class GameDataService {
       genres = "",
       categories = ""
     }:
-    { size: number,
-      name: string,
+    { name: string,
       supportedLanguages?: string,
       windows?: number,
       mac?: number,
@@ -55,10 +58,10 @@ export class GameDataService {
       categories?: string
     }): Observable<AppDetail[]>{
     const buildUrl = this.apiBaseUrl + this.gameDetailPath
-    console.log("Getting game detail batch")
-    return this.http.get<AppDetail[]>(buildUrl+`/getBatch/0`, {
+    console.log("Getting game detail batch, current index: "+this.currentIndex)
+    return this.http.get<AppDetail[]>(buildUrl+`/getBatch/${this.currentIndex+=batchSize}`, {
       params: { l: 'english',
-                size: size,
+                size: batchSize,
                 name: `${name}`,
                 supportedLanguages: `${supportedLanguages}`,
                 windows: windows == -1 ? "" : windows,
@@ -99,53 +102,11 @@ export class GameDataService {
     })
   }
 
-  //Get featured game ids
-  getFeaturedGameIds(): number[]{
-    return DummyGenerator.generateFeaturedGameIds()
+  getFeaturedGames(): Observable<AppDetail[]>{
+    const buildUrl = this.apiBaseUrl + this.gameFeaturedPath
+    return this.http.get<AppDetail[]>(buildUrl, {
+      params: { l: 'english'}
+    })
   }
 
-  //Get entry from app detail database based in appid
-  getDummyAppDetail(id: number): AppDetail{
-    return this.dummyAppDetailList[id]
-  }
-
-  getDummyAppDetailList(): Observable<AppDetail[]>{
-    return of(this.dummyAppDetailList)
-  }
-
-  private initDummyAppDetailList(): AppDetail[]{
-    for(var i = 0; i < 200; i++){
-      this.dummyAppDetailList.push(
-        { steam_appid: i,
-          name: "Test"+i,
-          required_age: DummyGenerator.generateRequiredAge(),
-          is_free: DummyGenerator.generateIsFree(),
-          detailed_description: DummyGenerator.generateDetailedDescription(),
-          about_the_game: DummyGenerator.generateAboutTheGame(),
-          short_description: DummyGenerator.generateShortDescription(),
-          supported_languages: DummyGenerator.generateSupportedLanguages(),
-          reviews: DummyGenerator.generateReviews(),
-          header_image: DummyGenerator.generateHeaderImage(),
-          website: DummyGenerator.generateWebsite(),
-          developers: DummyGenerator.generateDevelopers(),
-          publishers: DummyGenerator.generatePublishers(),
-          windows: DummyGenerator.generateIsWindows(),
-          mac: DummyGenerator.generateIsMac(),
-          linux: DummyGenerator.generateIsLinux(),
-          metacritic_score: DummyGenerator.generateMetacriticScore(), 
-          metacritic_url: DummyGenerator.generateMetacriticUrl(),
-          categories: DummyGenerator.generateCategories(),
-          genres: DummyGenerator.generateGenres(),
-          screenshots_thumbnail: DummyGenerator.generateScreenshotsThumbnail(),
-          screenshots_full: DummyGenerator.generateScreenshotsFull(),
-          recommendations: DummyGenerator.generateRecommendations(),
-          coming_soon: DummyGenerator.generateComingSoon(),
-          date: DummyGenerator.generateDate() }
-        )
-    }
-
-    return this.dummyAppDetailList
-  }
-
-  
 }
