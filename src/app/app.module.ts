@@ -39,6 +39,7 @@ import { ToolbarService } from './services/toolbar.service';
 import { ThemeService } from './services/theme.service';
 import { FilterService } from './services/filter.service';
 import { FilterOptionComponent } from './components/filter-drawer/components/filter-option/filter-option.component';
+import { GameDisplayComponent } from './pages/main/components/game-display/game-display.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { FilterOptionComponent } from './components/filter-drawer/components/fil
     FilterDrawerComponent,
     SearchBarComponent,
     DetailPageComponent,
-    FilterOptionComponent
+    FilterOptionComponent,
+    GameDisplayComponent
   ],
   imports: [
     BrowserModule,
