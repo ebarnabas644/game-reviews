@@ -7,18 +7,21 @@
 .game{
     color: white;
     position: absolute;
-    transition: margin-left 0.5s ease, width 0.5s ease, margin-top 0.5s ease, z-index 0.5s ease;
     width: 100%;
+    transition: margin-left 0.5s ease, width 0.5s ease, margin-top 0.5s ease, z-index 0.5s ease;
+    cursor: pointer;
 }
 
 .game img{
     width: 100%;
     border-radius: 5px;
     box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.5);
+    transition: height 0.5s ease;
 }
 
 .farLeft{
     width: 0vw;
+    height: 0vw;
     margin-left: 0vw;
     margin-top: 5.625vw;
     z-index: 1;
@@ -26,6 +29,7 @@
 
 .left{
     width: 40%;
+    height: 60%;
     margin-left: 0%;
     margin-top: 2.8125vw;
     z-index: 2;
@@ -33,12 +37,14 @@
 
 .middle{
     width: 60%;
+    height: 100%;
     margin-left: 20%;
     z-index: 3;
 }
 
 .right{
     width: 40%;
+    height: 60%;
     margin-left: 60%;
     margin-top: 2.8125vw;
     z-index: 2;
@@ -46,9 +52,20 @@
 
 .farRight{
     width: 0vw;
+    height: 0vw;
     margin-left: 30vw;
     margin-top: 5.625vw;
     z-index: 1;
+}
+
+.right-image-display, .left-image-display{
+    width: 50vw;
+    height: 20vw;
+}
+
+.middle-image-display{
+    width: 40vw;
+    height: 30vw;
 }
 
 .description{
