@@ -1,6 +1,6 @@
 <div class="display" (mouseenter)="hoverDisplay()" (mouseleave)="leaveDisplay()">
     <div *ngFor="let game of displayedGames; let indexOfelement=index;" [ngClass]="styleClasses[indexOfelement]" class="game" (click)="clickEvents[indexOfelement]()">
-        <img #image [src]="game.header_image" (mouseenter)="nextImage(game)" (mouseleave)="stopNextImage(game)"/>
+        <img #image [src]="game.header_image" (mouseenter)="nextImage(game)" [ngClass]="styleClasses[indexOfelement]+'-image-display'" (mouseleave)="stopNextImage(game)"/>
         <div class="description"><p>{{game.name}}</p></div>
     </div>
 </div>

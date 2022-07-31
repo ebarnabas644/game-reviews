@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from 'src/app/services/game-data.service';
 
@@ -21,7 +22,7 @@ export class GameDisplayComponent implements OnInit {
   @ViewChildren('image') images!:QueryList<ElementRef>;
   selectedImages: string[] = []
 
-  constructor(private gameDataService: GameDataService) { }
+  constructor(private gameDataService: GameDataService, private router: Router) { }
 
   ngOnInit(): void {
     this.gameDataService.getFeaturedGames().subscribe(featuredGames => {
@@ -97,7 +98,7 @@ export class GameDisplayComponent implements OnInit {
   }
 
   openSelected(){
-
+    this.router.navigateByUrl(`/search/${this.selectedGame.steam_appid}`)
   }
 
 }

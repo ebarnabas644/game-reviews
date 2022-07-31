@@ -40,6 +40,9 @@ import { ThemeService } from './services/theme.service';
 import { FilterService } from './services/filter.service';
 import { FilterOptionComponent } from './components/filter-drawer/components/filter-option/filter-option.component';
 import { GameDisplayComponent } from './pages/main/components/game-display/game-display.component';
+import { GenreSelectorComponent } from './components/filter-drawer/components/genre-selector/genre-selector.component';
+import { CategorySelectorComponent } from './components/filter-drawer/components/category-selector/category-selector.component';
+import { OperatingSystemSelectorComponent } from './components/filter-drawer/components/operating-system-selector/operating-system-selector.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { GameDisplayComponent } from './pages/main/components/game-display/game-
     SearchBarComponent,
     DetailPageComponent,
     FilterOptionComponent,
-    GameDisplayComponent
+    GameDisplayComponent,
+    GenreSelectorComponent,
+    CategorySelectorComponent,
+    OperatingSystemSelectorComponent
   ],
   imports: [
     BrowserModule,

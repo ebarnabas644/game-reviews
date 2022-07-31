@@ -1,8 +1,8 @@
 <div class="content">
     <div class="title" (click)="togglePanel()"><mat-icon [ngClass]="isVisible ? 'opened-icon' : 'closed-icon'" class="icon">keyboard_arrow_right</mat-icon>{{ title }}</div>
     <div class="options" [ngClass]="isVisible ? 'opened' : 'closed'">
-        <div *ngFor="let item of items">
-        <input type="checkbox" [id]="item.value" [name]="item.value" class="checkbox" value="{{item.value}}" (change)="onChange($event)">
+        <div *ngFor="let item of items; trackBy: trackByFn">
+        <input type="checkbox" [id]="item.value" [name]="item.value" class="checkbox" value="{{item.value}}" (change)="onChange($event)" [checked]="alreadySelectedCheck(item)">
         <label [for]="item.value">{{item.value}}</label>
         <br>
     </div>

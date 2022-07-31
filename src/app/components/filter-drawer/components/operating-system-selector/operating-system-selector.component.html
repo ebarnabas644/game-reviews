@@ -1,0 +1,11 @@
+<div class="operating-system-cards">
+    <div class="card" id="windows" [ngClass]="osArray[0] ? 'inverted' : ''" (click)="onOsChange($event.target)">
+      <img [ngClass]="darkMode ? 'inverted' : ''" src="../../../assets/icons/windows.png">
+    </div>
+    <div class="card" [ngClass]="osArray[1] ? 'inverted' : ''" id="linux" (click)="onOsChange($event.target)">
+      <img [ngClass]="darkMode ? 'inverted' : ''" src="../../../assets/icons/linux.png">
+    </div>
+    <div class="card" [ngClass]="osArray[2] ? 'inverted' : ''" id="mac" (click)="onOsChange($event.target)">
+      <img [ngClass]="darkMode ? 'inverted' : ''"  src="../../../assets/icons/apple.png">
+    </div>
+  </div>

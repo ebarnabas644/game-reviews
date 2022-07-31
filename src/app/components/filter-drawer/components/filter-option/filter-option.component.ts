@@ -1,15 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AppOther } from 'src/app/model/AppOther';
 
 @Component({
   selector: 'app-filter-option',
   templateUrl: './filter-option.component.html',
-  styleUrls: ['./filter-option.component.scss']
+  styleUrls: ['./filter-option.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterOptionComponent implements OnInit {
 
   @Input() title!: string;
   @Input() items!: AppOther[];
+  @Input() checkedItems!: AppOther[];
   @Output() onSelect = new EventEmitter();
   isVisible = false
   height = 0
@@ -33,5 +35,18 @@ export class FilterOptionComponent implements OnInit {
   onChange(event: any){
     this.onSelect.emit(event)
   }
+
+  alreadySelectedCheck(item: AppOther): boolean{
+    for (let i = 0; i < this.checkedItems.length; i++) {
+      if(this.checkedItems[i].value == item.value){
+        return true
+      }
+    }
+    return false
+  }
+
+  trackByFn(index: number, item: AppOther) {
+    return item.value;
+}
 
 }

@@ -6,6 +6,7 @@ import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { GameDataService } from 'src/app/services/game-data.service';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-filter-drawer',
@@ -18,14 +19,9 @@ export class FilterDrawerComponent implements OnInit {
   desktopMode = true;
   desktopStatusSubscription!: Subscription
   filterSubscription!: Subscription
-  genres!: AppOther[]
-  selectedGenres: AppOther[] = []
-  categories!: AppOther[]
-  selectedCategories: AppOther[] = []
-  operatingSystems: string[] = []
-  selectedOperatingSystems: string[] = []
+  darkMode!: boolean
 
-  constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService, private filterService: FilterService, private gameDataService: GameDataService) {
+  constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService, private filterService: FilterService, private gameDataService: GameDataService, private themeService: ThemeService) {
    }
 
   ngOnInit(): void {
@@ -34,15 +30,8 @@ export class FilterDrawerComponent implements OnInit {
       .subscribe(mode => {
         this.desktopMode = mode
       })
-      this.gameDataService
-      .getGameGenres()
-      .subscribe(genres => {
-        this.genres = genres
-      })
-      this.gameDataService
-      .getGameCategories()
-      .subscribe(categories => {
-        this.categories = categories
+      this.themeService.getDarkMode().subscribe(mode =>{
+        this.darkMode = mode
       })
   }
 
@@ -53,39 +42,4 @@ export class FilterDrawerComponent implements OnInit {
   ngOnDestroy(): void{
     this.desktopStatusSubscription.unsubscribe()
   }
-
-  onGenreChange(event: any): void{
-    if(event.checked){
-      var objectToAdd: AppOther = { value: event.value }
-      this.selectedGenres.push(objectToAdd)
-    }
-    else{
-      var objectToAdd: AppOther = { value: event.value }
-      for(var i = 0; i < this.selectedGenres.length; i++){
-        if(this.selectedGenres[i].value == objectToAdd.value){
-          this.selectedGenres.splice(i,1)
-          break
-        }
-      }
-    }
-    this.filterService.updateGenres(this.selectedGenres)
-  }
-
-  onCategoryChange(event: any): void{
-    if(event.checked){
-      var objectToAdd: AppOther = { value: event.value }
-      this.selectedCategories.push(objectToAdd)
-    }
-    else{
-      var objectToAdd: AppOther = { value: event.value }
-      for(var i = 0; i < this.selectedCategories.length; i++){
-        if(this.selectedCategories[i].value == objectToAdd.value){
-          this.selectedCategories.splice(i,1)
-          break
-        }
-      }
-    }
-    this.filterService.updateCategories(this.selectedCategories)
-  }
-
 }

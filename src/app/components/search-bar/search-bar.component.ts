@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { SearchService } from 'src/app/services/search.service';
 
 @Component({
@@ -6,13 +7,18 @@ import { SearchService } from 'src/app/services/search.service';
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss']
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent implements OnInit, OnDestroy {
 
   searchValue = ""
+
+  searchSub!: Subscription
 
   constructor(private searchService: SearchService) { }
 
   ngOnInit(): void {
+    this.searchSub = this.searchService.getAppName().subscribe(value =>{
+      this.searchValue = value
+    })
   }
 
   onSearch(event: any): void{
@@ -23,6 +29,10 @@ export class SearchBarComponent implements OnInit {
   onClear(): void{
     this.searchService.updateAppName("")
     this.searchValue = ""
+  }
+
+  ngOnDestroy(): void {
+    this.searchSub.unsubscribe()
   }
 
 }

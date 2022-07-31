@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { AppOther } from '../model/AppOther';
 
 @Injectable({
@@ -7,14 +7,12 @@ import { AppOther } from '../model/AppOther';
 })
 export class FilterService {
 
-  private supportedLanguages = new Subject<string>();
-  private genres = new Subject<AppOther[]>();
-  private categories = new Subject<AppOther[]>();
-  private windows = new Subject<number>();
-  private mac = new Subject<number>();
-  private linux = new Subject<number>();
-  private min_metacritic_score = new Subject<number>();
-  private coming_soon = new Subject<number>();
+  private supportedLanguages = new BehaviorSubject<string>("");
+  private genres = new BehaviorSubject<AppOther[]>([]);
+  private categories = new BehaviorSubject<AppOther[]>([]);
+  private min_metacritic_score = new BehaviorSubject<number>(0);
+  private coming_soon = new BehaviorSubject<number>(-1);
+  private osArray = new BehaviorSubject<number[]>([-1,-1,-1]);
 
   public getSupportedLanguages(): Observable<string>{
     return this.supportedLanguages.asObservable()
@@ -40,30 +38,6 @@ export class FilterService {
     this.categories.next(newCategories)
   }
 
-  public getWindows(): Observable<number>{
-    return this.windows.asObservable()
-  }
-
-  public updateWindows(newWindows: number){
-    this.windows.next(newWindows)
-  }
-
-  public getMac(): Observable<number>{
-    return this.mac.asObservable()
-  }
-
-  public updateMac(newMac: number){
-    this.mac.next(newMac)
-  }
-
-  public getLinux(): Observable<number>{
-    return this.linux.asObservable()
-  }
-
-  public updateLinux(newLinux: number){
-    this.linux.next(newLinux)
-  }
-
   public getMinMetacriticScore(): Observable<number>{
     return this.min_metacritic_score.asObservable()
   }
@@ -78,6 +52,31 @@ export class FilterService {
 
   public updateComingSoon(newComingSoon: number){
     this.coming_soon.next(newComingSoon)
+  }
+
+  public getOsSelection(): Observable<number[]>{
+    return this.osArray.asObservable()
+  }
+
+  public updateOsSelection(selectedArray: boolean[]){
+    let counter = 0
+    for (let i = 0; i < selectedArray.length; i++) {
+      if(selectedArray[i] != false){
+        break;
+      }
+      counter++;
+    }
+    if(counter == selectedArray.length){
+      this.osArray.next([-1,-1,-1])
+    }
+    else{
+      let converted: number[] = [-1,-1,-1]
+      for (let i = 0; i < selectedArray.length; i++) {
+        converted[i] = selectedArray[i] ? 1 : -1
+      }
+      console.log(converted)
+      this.osArray.next(converted)
+    }
   }
 
   constructor() { }

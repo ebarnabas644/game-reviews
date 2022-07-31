@@ -1,10 +1,10 @@
 <mat-drawer-container [hasBackdrop]="!desktopMode">
     <mat-drawer class="full-drawer" #drawer mode="side" position="end" [opened]="desktopMode">
       <div class="drawer">
-        <h2>Filter options</h2>
-        <app-filter-option title="Genres" [items]="genres" (onSelect)="onGenreChange($event.target)"></app-filter-option>
-        <app-filter-option title="Categories" [items]="categories" (onSelect)="onCategoryChange($event.target)"></app-filter-option>
-        <img src="../../../assets/icons/windows.png">
+        <h2 class="title">Filter options</h2>
+        <app-genre-selector></app-genre-selector>
+        <app-category-selector></app-category-selector>
+        <app-operating-system-selector [darkMode]="darkMode"></app-operating-system-selector>
     </div>
     </mat-drawer>
       <mat-drawer-content class="content">
