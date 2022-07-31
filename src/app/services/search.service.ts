@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
 
-  private appName = new Subject<string>();
+  private appName = new BehaviorSubject<string>("");
 
   public getAppName(): Observable<string>{
     return this.appName.asObservable()
