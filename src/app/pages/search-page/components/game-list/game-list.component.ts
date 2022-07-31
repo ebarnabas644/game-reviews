@@ -1,9 +1,9 @@
-import { Component, NgZone, OnInit, ElementRef, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, NgZone, OnInit, ElementRef, AfterViewChecked, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from '../../../../services/game-data.service'
 import { ViewChild } from '@angular/core'
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil, Subscription } from 'rxjs';
 import { AppBase } from 'src/app/model/AppBase';
 import { SearchService } from 'src/app/services/search.service';
 import { FilterService } from 'src/app/services/filter.service';
@@ -12,9 +12,10 @@ import { AppOther } from 'src/app/model/AppOther';
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.scss']
+  styleUrls: ['./game-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameListComponent implements OnInit {
+export class GameListComponent implements OnInit, OnDestroy {
   gameListCache: AppDetail[] = []
   newData: AppDetail[] = []
   @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
@@ -30,16 +31,24 @@ export class GameListComponent implements OnInit {
   private firstStartUp: boolean = true
   genresFilter: string = ""
   categoryFilter: string = ""
+  osSelection: number[] = [-1,-1,-1]
+
+  fetchDataSub!: Subscription
+  searchSub!: Subscription
+  genreFilterSub!: Subscription
+  categoryFilterSub!: Subscription
+  osFilterSub!: Subscription
 
 
-  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService) { }
+  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.gameDataService.resetBatchIndex()
-    this.fetchData()
     this.searchSubscription();
     this.genreFilterSubscription();
     this.categoryFilterSubscription();
+    this.osSelectionSubscription();
+    this.fetchSubscribe();
     this.onResize();
     console.log(this.cardPerRow)
   }
@@ -56,15 +65,15 @@ export class GameListComponent implements OnInit {
       this.interval = 200
     }
     this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
-
   }
 
   fetchSubscribe(): void{
-    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter })
+    this.fetchDataSub = this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection })
       .subscribe({
         next: (data) => this.fillCache(data),
         error: (err) => console.log(err),
-        complete: () => {
+        complete: () => { 
+          this.ref.markForCheck();
           }})
   }
 
@@ -89,7 +98,7 @@ export class GameListComponent implements OnInit {
   }
 
   private searchSubscription(){
-    this.searchService.getAppName().subscribe(name => {
+    this.searchSub = this.searchService.getAppName().subscribe(name => {
       this.currentSearchName = name
       this.resetScroller()
       this.fetchData()
@@ -97,7 +106,7 @@ export class GameListComponent implements OnInit {
   }
 
   private genreFilterSubscription() {
-    this.filterService.getGenres().subscribe(genres => {
+    this.genreFilterSub = this.filterService.getGenres().subscribe(genres => {
       this.genresFilter = this.convertArrayToString(genres)
       this.resetScroller();
       this.fetchData();
@@ -105,23 +114,19 @@ export class GameListComponent implements OnInit {
   }
 
   private categoryFilterSubscription() {
-    this.filterService.getCategories().subscribe(categories => {
+    this.categoryFilterSub = this.filterService.getCategories().subscribe(categories => {
       this.categoryFilter = this.convertArrayToString(categories)
       this.resetScroller();
       this.fetchData();
     });
   }
 
-  private windowsFilterSubscription(){
-
-  }
-
-  private macFilterSubscription(){
-    
-  }
-
-  private linuxFilterSubscription(){
-    
+  private osSelectionSubscription(){
+    this.osFilterSub = this.filterService.getOsSelection().subscribe(selection =>{
+      this.osSelection = selection
+      this.resetScroller();
+      this.fetchData();
+    })
   }
 
   private comingsoonFilterSubscription(){
@@ -148,7 +153,9 @@ export class GameListComponent implements OnInit {
   }
 
   resetScroller(){
-    this.scroller.scrollToIndex(0);
+    if(this.scroller != undefined){
+      this.scroller.scrollToIndex(0);
+    }
     this.gameDataService.resetBatchIndex()
     this.gameListCache = []
   }
@@ -193,5 +200,18 @@ export class GameListComponent implements OnInit {
     data.name = filteredName
     return data
   }
+
+  ngOnDestroy(): void {
+    this.fetchDataSub.unsubscribe()
+    this.searchSub.unsubscribe()
+    this.categoryFilterSub.unsubscribe()
+    this.genreFilterSub.unsubscribe()
+    this.osFilterSub.unsubscribe()
+  }
+
+  trackByFn(index: number, item: AppDetail[]) {
+    return item
+}
+
 
 }
