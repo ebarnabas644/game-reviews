@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
@@ -13,6 +13,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgcCookieConsentModule } from 'ngx-cookieconsent';
+import { HammerModule } from "@angular/platform-browser";
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,6 +47,10 @@ import { GameDisplayComponent } from './pages/main/components/game-display/game-
 import { GenreSelectorComponent } from './components/filter-drawer/components/genre-selector/genre-selector.component';
 import { CategorySelectorComponent } from './components/filter-drawer/components/category-selector/category-selector.component';
 import { OperatingSystemSelectorComponent } from './components/filter-drawer/components/operating-system-selector/operating-system-selector.component';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
@@ -82,7 +90,14 @@ import { OperatingSystemSelectorComponent } from './components/filter-drawer/com
     MatCardModule,
     MatSidenavModule,
     LayoutModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    HammerModule,
+    TranslateModule.forRoot({loader: {
+      provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+    }
+  })
   ],
   providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService],
   bootstrap: [AppComponent]
