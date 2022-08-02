@@ -17,10 +17,6 @@ a:hover{
     cursor: pointer;
 }
 
-.drawer-destination:hover{
-    filter: invert(50%);
-}
-
 .full-drawer{
     height: 100%;
     background-color: var(--accent-color);
@@ -28,7 +24,7 @@ a:hover{
 }
 
 .container{
-    height: 100%;
+    height: calc(100% - 64px);
 }
 
 mat-icon{
@@ -42,6 +38,13 @@ mat-icon{
     }
 }
 
+@media (hover: hover) and (pointer: fine) {
+    .drawer-destination:hover{
+        filter: invert(50%);
+    }
+  }
+
+
 .drawer{
     position: relative;
     height: 100%;
@@ -50,4 +53,9 @@ mat-icon{
 .float-down{
     position: absolute;
     bottom: 0;
+}
+
+.content{
+    touch-action: pan-y !important;
+    height: 100%;
 }
