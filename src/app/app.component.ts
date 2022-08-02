@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DesktopModeService } from './services/desktop-mode.service';
 import { ThemeService } from './services/theme.service';
+import { NgcCookieConsentService } from 'ngx-cookieconsent';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +14,13 @@ export class AppComponent implements OnInit{
   desktopWidth = 900;
   darkMode = false
 
-  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService){
+  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService, private translate: TranslateService){
   }
 
   ngOnInit(): void{
+    this.translate.addLangs(['en', 'de']);
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
   }
 
