@@ -14,9 +14,14 @@
           <mat-icon>search</mat-icon>
         </div>
       </a>
-      <div class="drawer-destination float-down" (click)="toogleDarkMode()">
-        <mat-icon *ngIf="!darkMode">wb_sunny</mat-icon>
-        <mat-icon *ngIf="darkMode">brightness_2</mat-icon>
+      <div class="float-down">
+        <div class="drawer-destination" (click)="nextLanguage()">
+          {{languages[selectedLanguageIndex]}}
+        </div>
+        <div class="drawer-destination" (click)="toogleDarkMode()">
+          <mat-icon *ngIf="!darkMode">wb_sunny</mat-icon>
+          <mat-icon *ngIf="darkMode">brightness_2</mat-icon>
+        </div>
       </div>
   </div>
   </mat-drawer>

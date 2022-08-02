@@ -7,7 +7,7 @@ import { NavigationDrawerService } from 'src/app/services/navigation-drawer.serv
 import { ThemeService } from 'src/app/services/theme.service';
 import { Location } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
-import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-drawer',
@@ -21,8 +21,10 @@ export class DrawerComponent implements OnInit {
   desktopWidth = 900;
   desktopMode = true
   desktopStatusSubscription!: Subscription
+  selectedLanguageIndex = 0
+  languages = ['en', 'de']
 
-  constructor(private drawerService: NavigationDrawerService, private desktopModeService: DesktopModeService, private themeService: ThemeService, private router: Router, private location: Location, private cookieService: CookieService) {
+  constructor(private drawerService: NavigationDrawerService, private desktopModeService: DesktopModeService, private themeService: ThemeService, private router: Router, private location: Location, private cookieService: CookieService, private translator: TranslateService) {
    }
 
   ngOnInit(): void {
@@ -52,6 +54,11 @@ export class DrawerComponent implements OnInit {
 
   backButton(){
     this.location.back()
+  }
+
+  nextLanguage(){
+    this.selectedLanguageIndex = (this.selectedLanguageIndex + 1) % this.languages.length;
+    this.translator.use(this.languages[this.selectedLanguageIndex])
   }
 
 }
