@@ -17,8 +17,22 @@ div{
     height: 100%;
 }
 
+.search{
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
 mat-toolbar-row{
   height: 64px;
   background-color: var(--primary-color);
   transition: background-color 0.5s ease;
+}
+
+.nav-icon{
+  padding-right: 5px;
+  min-width: 24px;
+}
+
+.title{
+  overflow: hidden;
 }
