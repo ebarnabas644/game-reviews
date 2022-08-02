@@ -21,6 +21,7 @@ export class GameDisplayComponent implements OnInit {
   clickEvents = [this.previousGame.bind(this), this.previousGame.bind(this), this.openSelected.bind(this), this.nextGame.bind(this), this.nextGame.bind(this)]
   @ViewChildren('image') images!:QueryList<ElementRef>;
   selectedImages: string[] = []
+  nextInterval: number = 3000
 
   constructor(private gameDataService: GameDataService, private router: Router) { }
 
@@ -38,7 +39,8 @@ export class GameDisplayComponent implements OnInit {
     })
     this.nextSelectedGameTimer = setInterval(() => {
       this.nextGame()
-    }, 3000)
+      this.nextInterval = 3000
+    }, this.nextInterval)
   }
 
   nextGame(): void{
@@ -68,7 +70,6 @@ export class GameDisplayComponent implements OnInit {
     this.nextImageHoverTimer = setInterval(() => {
       this.images.get(2)!.nativeElement.src = this.selectedImages[index++ % this.selectedImages.length]
     }, 1000)
-
   }
 
   stopNextImage(game: AppDetail){
@@ -86,7 +87,8 @@ export class GameDisplayComponent implements OnInit {
   leaveDisplay(){
     this.nextSelectedGameTimer = setInterval(() => {
       this.nextGame()
-    }, 3000)
+      this.nextInterval = 3000
+    }, this.nextInterval)
   }
 
   wrap(index: number): number{
