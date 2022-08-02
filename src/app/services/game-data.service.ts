@@ -5,12 +5,12 @@ import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
 import { AppOther } from '../model/AppOther';
 
-const batchSize = 30;
+const batchSize = 20;
 @Injectable({
   providedIn: 'root'
 })
 export class GameDataService {
-  private apiBaseUrl = "http://localhost:8080"
+  private apiBaseUrl = "http://192.168.2.139:8080"
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
   private gameListPath = "/api/appList"
   private gameDetailPath = "/api/detailList"
