@@ -22,7 +22,7 @@ export class CategorySelectorComponent implements OnInit, OnDestroy {
   constructor(private filterService: FilterService, private gameDataService: GameDataService, private translate: TranslateService) { }
 
   ngOnInit(): void {
-    this.translate.get(['filter.categories'])
+    this.translate.stream(['filter.categories'])
     .subscribe(translations => {
       this.categoriesLabel = translations['filter.categories'];
     });
