@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AppOther } from 'src/app/model/AppOther';
 import { FilterService } from 'src/app/services/filter.service';
@@ -13,13 +14,18 @@ export class CategorySelectorComponent implements OnInit, OnDestroy {
 
   categories!: AppOther[]
   selectedCategories: AppOther[] = []
+  categoriesLabel!: string
 
   categoryDataSub!: Subscription
   selectedCategorySub!: Subscription
 
-  constructor(private filterService: FilterService, private gameDataService: GameDataService) { }
+  constructor(private filterService: FilterService, private gameDataService: GameDataService, private translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.translate.get(['filter.categories'])
+    .subscribe(translations => {
+      this.categoriesLabel = translations['filter.categories'];
+    });
     this.categoryDataSub = this.gameDataService.getGameCategories().subscribe(categories => {
       this.categories = categories
     })
