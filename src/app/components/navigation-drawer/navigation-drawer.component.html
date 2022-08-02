@@ -1,6 +1,9 @@
 <mat-drawer-container class="container" [hasBackdrop]="!desktopMode">
   <mat-drawer class="full-drawer" #drawer mode="side" position="start" [opened]="desktopMode">
     <div class="drawer">
+      <div class="drawer-destination" *ngIf="isGameView()" (click)="backButton()">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </div>
       <a routerLink="/">
         <div class="drawer-destination">
           <mat-icon>home</mat-icon>
@@ -17,7 +20,7 @@
       </div>
   </div>
   </mat-drawer>
-    <mat-drawer-content>
+    <mat-drawer-content class="content">
         <ng-content></ng-content>
     </mat-drawer-content>
 </mat-drawer-container>
