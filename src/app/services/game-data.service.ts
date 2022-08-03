@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
 import { AppOther } from '../model/AppOther';
+import { LanguagePipe } from '../tools/LanguagePipe';
 
 const batchSize = 20;
 @Injectable({
@@ -22,7 +23,7 @@ export class GameDataService {
   private currentIndex = -batchSize
   
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
    }
 
    resetBatchIndex(){
@@ -43,7 +44,8 @@ export class GameDataService {
       min_metacritic_score = -1,
       coming_soon = -1,
       genres = "",
-      categories = ""
+      categories = "",
+      language = "english"
     }:
     { name: string,
       supportedLanguages?: string,
@@ -51,12 +53,13 @@ export class GameDataService {
       min_metacritic_score?: number,
       coming_soon?: number,
       genres?: string,
-      categories?: string
+      categories?: string,
+      language?: string
     }): Observable<AppDetail[]>{
     const buildUrl = this.apiBaseUrl + this.gameDetailPath
     console.log("Getting game detail batch, current index: "+this.currentIndex)
     return this.http.get<AppDetail[]>(buildUrl+`/getBatch/${this.currentIndex+=batchSize}`, {
-      params: { l: 'english',
+      params: { l: this.languagePipe.transform(language),
                 size: batchSize,
                 name: `${name}`,
                 supportedLanguages: `${supportedLanguages}`,
@@ -71,37 +74,37 @@ export class GameDataService {
     })
   }
 
-  getGameDetail(appid: number): Observable<AppDetail>{
+  getGameDetail(appid: number, language: string): Observable<AppDetail>{
     const buildUrl = this.apiBaseUrl + this.gameDetailPath
     return this.http.get<AppDetail>(buildUrl+`/${appid}`, {
-      params: { l: 'english' }})
+      params: { l: this.languagePipe.transform(language) }})
   }
 
-  getGameLanguages(): Observable<AppOther[]>{
+  getGameLanguages(language: string): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameLanguageListPath
     return this.http.get<AppOther[]>(buildUrl, {
-      params: { l: 'english'}
+      params: { l: this.languagePipe.transform(language)}
     })
   }
 
-  getGameGenres(): Observable<AppOther[]>{
+  getGameGenres(language: string): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameGenreListPath
     return this.http.get<AppOther[]>(buildUrl, {
-      params: { l: 'english'}
+      params: { l: this.languagePipe.transform(language)}
     })
   }
 
-  getGameCategories(): Observable<AppOther[]>{
+  getGameCategories(language: string): Observable<AppOther[]>{
     const buildUrl = this.apiBaseUrl + this.gameCategoryListPath
     return this.http.get<AppOther[]>(buildUrl, {
-      params: { l: 'english'}
+      params: { l: this.languagePipe.transform(language)}
     })
   }
 
-  getFeaturedGames(): Observable<AppDetail[]>{
+  getFeaturedGames(language: string): Observable<AppDetail[]>{
     const buildUrl = this.apiBaseUrl + this.gameFeaturedPath
     return this.http.get<AppDetail[]>(buildUrl, {
-      params: { l: 'english'}
+      params: { l: this.languagePipe.transform(language)}
     })
   }
 

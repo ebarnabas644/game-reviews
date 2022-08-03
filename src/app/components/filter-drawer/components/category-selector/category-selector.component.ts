@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AppOther } from 'src/app/model/AppOther';
 import { FilterService } from 'src/app/services/filter.service';
 import { GameDataService } from 'src/app/services/game-data.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-category-selector',
   templateUrl: './category-selector.component.html',
@@ -15,23 +17,42 @@ export class CategorySelectorComponent implements OnInit, OnDestroy {
   categories!: AppOther[]
   selectedCategories: AppOther[] = []
   categoriesLabel!: string
-
-  categoryDataSub!: Subscription
-  selectedCategorySub!: Subscription
+  currentLanguage!: string
 
   constructor(private filterService: FilterService, private gameDataService: GameDataService, private translate: TranslateService) { }
 
   ngOnInit(): void {
-    this.translate.stream(['filter.categories'])
+    this.currentLanguage = this.translate.currentLang
+    this.onLanguageChangeSubscribe()
+    this.getCategorySubscribe()
+    this.selectedCategorySubscribe()
+    this.labelTranslateSubscribe()
+  }
+
+  onLanguageChangeSubscribe(){
+    this.translate.onLangChange.pipe(untilDestroyed(this)).subscribe((event: LangChangeEvent) =>{
+      this.currentLanguage = event.lang
+      this.getCategorySubscribe()
+    })
+  }
+
+  getCategorySubscribe(){
+    this.gameDataService.getGameCategories(this.currentLanguage).pipe(untilDestroyed(this)).subscribe(categories => {
+      this.categories = categories
+    })
+  }
+
+  selectedCategorySubscribe(){
+    this.filterService.getCategories().pipe(untilDestroyed(this)).subscribe(selected => {
+      this.selectedCategories = selected
+    })
+  }
+
+  labelTranslateSubscribe(){
+    this.translate.stream(['filter.categories']).pipe(untilDestroyed(this))
     .subscribe(translations => {
       this.categoriesLabel = translations['filter.categories'];
     });
-    this.categoryDataSub = this.gameDataService.getGameCategories().subscribe(categories => {
-      this.categories = categories
-    })
-    this.selectedCategorySub = this.filterService.getCategories().subscribe(selected => {
-      this.selectedCategories = selected
-    })
   }
 
   onCategoryChange(event: any): void{
@@ -52,8 +73,6 @@ export class CategorySelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.categoryDataSub.unsubscribe()
-    this.selectedCategorySub.unsubscribe()
   }
 
 }

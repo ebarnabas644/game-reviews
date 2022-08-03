@@ -21,13 +21,18 @@ export class DrawerComponent implements OnInit {
   desktopWidth = 900;
   desktopMode = true
   desktopStatusSubscription!: Subscription
-  selectedLanguageIndex = 0
-  languages = ['en', 'de']
+  selectedLanguageFlag!: string
+  flagList = ['gb','de']
+  languageList!: string[]
+  languageSelectorVisibility: boolean = false
 
   constructor(private drawerService: NavigationDrawerService, private desktopModeService: DesktopModeService, private themeService: ThemeService, private router: Router, private location: Location, private cookieService: CookieService, private translator: TranslateService) {
    }
 
   ngOnInit(): void {
+    this.languageList = this.translator.getLangs()
+    this.setLanguage(this.translator.defaultLang)
+    console.log(this.languageList)
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
     this.desktopStatusSubscription = this.desktopModeService
     .getDesktopModeStatus()
@@ -56,9 +61,17 @@ export class DrawerComponent implements OnInit {
     this.location.back()
   }
 
-  nextLanguage(){
-    this.selectedLanguageIndex = (this.selectedLanguageIndex + 1) % this.languages.length;
-    this.translator.use(this.languages[this.selectedLanguageIndex])
+  setLanguage(lang: string){
+    this.translator.use(lang)
+    this.selectedLanguageFlag = this.flagList[this.languageList.indexOf(lang)]
+  }
+
+  toggleLanguageSelector(){
+    this.languageSelectorVisibility = !this.languageSelectorVisibility
+  }
+
+  closeLanguageSelector(){
+    this.languageSelectorVisibility = false
   }
 
 }

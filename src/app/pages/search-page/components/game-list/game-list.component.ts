@@ -9,6 +9,7 @@ import { SearchService } from 'src/app/services/search.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { AppOther } from 'src/app/model/AppOther';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 @UntilDestroy()
 @Component({
@@ -34,17 +35,20 @@ export class GameListComponent implements OnInit, OnDestroy {
   genresFilter: string = ""
   categoryFilter: string = ""
   osSelection: number[] = [-1,-1,-1]
+  currentLanguage!: string
 
-  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef) { }
+  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef, private translate: TranslateService) { }
 
   ngOnInit(): void {
+    this.currentLanguage = this.translate.currentLang
     this.gameDataService.resetBatchIndex()
-    this.searchSubscription();
-    this.genreFilterSubscription();
-    this.categoryFilterSubscription();
-    this.osSelectionSubscription();
-    this.fetchSubscribe();
-    this.onResize();
+    this.onLanguageChangeSubscribe()
+    this.searchSubscription()
+    this.genreFilterSubscription()
+    this.categoryFilterSubscription()
+    this.osSelectionSubscription()
+    this.fetchSubscribe()
+    this.onResize()
     console.log(this.cardPerRow)
   }
 
@@ -62,8 +66,14 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
   }
 
+  onLanguageChangeSubscribe(){
+    this.translate.onLangChange.pipe(untilDestroyed(this)).subscribe((event: LangChangeEvent) =>{
+      this.currentLanguage = event.lang
+    })
+  }
+
   fetchSubscribe(): void{
-    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection }).pipe(untilDestroyed(this)).subscribe({
+    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection, language: this.currentLanguage }).pipe(untilDestroyed(this)).subscribe({
       next: (data) => this.fillCache(data),
       error: (err) => console.log(err),
       complete: () => { 
