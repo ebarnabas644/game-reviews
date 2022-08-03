@@ -2,6 +2,7 @@
 @use 'themes/palette-helper';
 @import 'themes/generate.scss';
 @import '@angular/material/theming';
+@import "flag-icons/sass/flag-icons";
 @include mat.core();
 
 $coal-palette: (
