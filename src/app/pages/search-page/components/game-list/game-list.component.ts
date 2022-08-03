@@ -8,7 +8,9 @@ import { AppBase } from 'src/app/model/AppBase';
 import { SearchService } from 'src/app/services/search.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { AppOther } from 'src/app/model/AppOther';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
@@ -32,13 +34,6 @@ export class GameListComponent implements OnInit, OnDestroy {
   genresFilter: string = ""
   categoryFilter: string = ""
   osSelection: number[] = [-1,-1,-1]
-
-  fetchDataSub!: Subscription
-  searchSub!: Subscription
-  genreFilterSub!: Subscription
-  categoryFilterSub!: Subscription
-  osFilterSub!: Subscription
-
 
   constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef) { }
 
@@ -68,13 +63,12 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   fetchSubscribe(): void{
-    this.fetchDataSub = this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection })
-      .subscribe({
-        next: (data) => this.fillCache(data),
-        error: (err) => console.log(err),
-        complete: () => { 
-          this.ref.markForCheck();
-          }})
+    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection }).pipe(untilDestroyed(this)).subscribe({
+      next: (data) => this.fillCache(data),
+      error: (err) => console.log(err),
+      complete: () => { 
+        this.ref.markForCheck();
+        }})
   }
 
   fillCache(data: AppDetail[]): void{
@@ -98,7 +92,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   private searchSubscription(){
-    this.searchSub = this.searchService.getAppName().subscribe(name => {
+    this.searchService.getAppName().pipe(untilDestroyed(this)).subscribe(name => {
       this.currentSearchName = name
       this.resetScroller()
       this.fetchData()
@@ -106,7 +100,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   private genreFilterSubscription() {
-    this.genreFilterSub = this.filterService.getGenres().subscribe(genres => {
+    this.filterService.getGenres().pipe(untilDestroyed(this)).subscribe(genres => {
       this.genresFilter = this.convertArrayToString(genres)
       this.resetScroller();
       this.fetchData();
@@ -114,7 +108,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   private categoryFilterSubscription() {
-    this.categoryFilterSub = this.filterService.getCategories().subscribe(categories => {
+    this.filterService.getCategories().pipe(untilDestroyed(this)).subscribe(categories => {
       this.categoryFilter = this.convertArrayToString(categories)
       this.resetScroller();
       this.fetchData();
@@ -122,7 +116,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   private osSelectionSubscription(){
-    this.osFilterSub = this.filterService.getOsSelection().subscribe(selection =>{
+    this.filterService.getOsSelection().pipe(untilDestroyed(this)).subscribe(selection =>{
       this.osSelection = selection
       this.resetScroller();
       this.fetchData();
@@ -188,7 +182,7 @@ export class GameListComponent implements OnInit, OnDestroy {
       pairwise(),
       filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
       throttleTime(500)
-    ).subscribe(() => {
+    ).pipe(untilDestroyed(this)).subscribe(() => {
       this.ngZone.run(() => {
        this.fetchData();
       });
@@ -201,17 +195,9 @@ export class GameListComponent implements OnInit, OnDestroy {
     return data
   }
 
-  ngOnDestroy(): void {
-    this.fetchDataSub.unsubscribe()
-    this.searchSub.unsubscribe()
-    this.categoryFilterSub.unsubscribe()
-    this.genreFilterSub.unsubscribe()
-    this.osFilterSub.unsubscribe()
-  }
+  ngOnDestroy(): void { }
 
   trackByFn(index: number, item: AppDetail[]) {
     return item
-}
-
-
+  }
 }
