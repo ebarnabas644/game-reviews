@@ -1,5 +1,5 @@
 <mat-drawer-container class="container" [hasBackdrop]="!desktopMode">
-  <mat-drawer class="full-drawer" #drawer mode="side" position="start" [opened]="desktopMode">
+  <mat-drawer class="full-drawer" #drawer mode="side" position="start" (closed)="closeLanguageSelector()" [opened]="desktopMode">
     <div class="drawer">
       <div class="drawer-destination" *ngIf="isGameView()" (click)="backButton()">
         <mat-icon>keyboard_backspace</mat-icon>
@@ -15,8 +15,11 @@
         </div>
       </a>
       <div class="float-down">
-        <div class="drawer-destination" (click)="nextLanguage()">
-          {{languages[selectedLanguageIndex]}}
+        <div class="language-selector" (click)="toggleLanguageSelector()">
+          <span class="flag-icon" [ngClass]="'fi fi-'+selectedLanguageFlag"></span>
+          <span class="language-selector-content" [ngClass]="desktopMode ? '' : (languageSelectorVisibility ? 'opened' : '')">
+            <span *ngFor="let flag of flagList; let i = index" (click)="setLanguage(languageList[i])" class="language-option"><span class="flag-icon" [ngClass]="'fi fi-'+flag"></span></span>
+          </span>
         </div>
         <div class="drawer-destination" (click)="toogleDarkMode()">
           <mat-icon *ngIf="!darkMode">wb_sunny</mat-icon>

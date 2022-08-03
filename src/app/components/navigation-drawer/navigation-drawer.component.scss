@@ -18,6 +18,7 @@ a:hover{
 }
 
 .full-drawer{
+    overflow: visible !important;
     height: 100%;
     background-color: var(--accent-color);
     transition: background-color 0.5s ease;
@@ -33,7 +34,6 @@ mat-icon{
 
 @media only screen and (max-width: 900px) {
     .drawer-destination{
-        padding: 30px;
         font-size: x-large;
     }
 }
@@ -41,6 +41,9 @@ mat-icon{
 @media (hover: hover) and (pointer: fine) {
     .drawer-destination:hover{
         filter: invert(50%);
+    }
+    .language-selector:hover .language-selector-content{
+        width: 100%;
     }
   }
 
@@ -58,4 +61,42 @@ mat-icon{
 .content{
     touch-action: pan-y !important;
     height: 100%;
+}
+
+.language-selector{
+    //position: relative;
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.language-selector-content{
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    background-color: var(--accent-color);
+    margin-top: -50px;
+    width: 0%;
+    left: 55px;
+    transition: width 0.5s ease;
+}
+
+//https://github.com/angular/components/issues/13983
+::ng-deep .mat-drawer-inner-container {
+    overflow: visible!important;
+}
+
+.language-option{
+    padding: 30px;
+}
+
+.drawer-destination:hover.language-selector{
+    filter: invert(0%);
+}
+
+.opened{
+    width: 100%;
+}
+
+.flag-icon{
+    transform: scale(2);
 }

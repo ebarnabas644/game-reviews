@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from 'src/app/services/game-data.service';
 
@@ -22,11 +23,15 @@ export class GameDisplayComponent implements OnInit {
   @ViewChildren('image') images!:QueryList<ElementRef>;
   selectedImages: string[] = []
   nextInterval: number = 3000
+  currentLanguage!: string
 
-  constructor(private gameDataService: GameDataService, private router: Router) { }
+  constructor(private gameDataService: GameDataService, private router: Router, private translate: TranslateService) { }
 
   ngOnInit(): void {
-    this.gameDataService.getFeaturedGames().subscribe(featuredGames => {
+    this.translate.onLangChange.subscribe((event: LangChangeEvent) =>{
+      this.currentLanguage = event.lang
+    })
+    this.gameDataService.getFeaturedGames(this.currentLanguage).subscribe(featuredGames => {
       this.featuredGames = featuredGames
       this.selectedIndex = 0
       this.selectedGame = this.featuredGames[this.selectedIndex]

@@ -47,6 +47,7 @@ import { GameDisplayComponent } from './pages/main/components/game-display/game-
 import { GenreSelectorComponent } from './components/filter-drawer/components/genre-selector/genre-selector.component';
 import { CategorySelectorComponent } from './components/filter-drawer/components/category-selector/category-selector.component';
 import { OperatingSystemSelectorComponent } from './components/filter-drawer/components/operating-system-selector/operating-system-selector.component';
+import { LanguagePipe } from './tools/LanguagePipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -99,7 +100,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }
   })
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService, LanguagePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {
