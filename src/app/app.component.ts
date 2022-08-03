@@ -18,8 +18,8 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void{
-    this.translate.addLangs(['en', 'de']);
-    this.translate.setDefaultLang('en');
+    this.translate.addLangs(['en-GB', 'de-DE']);
+    this.translate.setDefaultLang('en-GB');
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
     this.translate.get(['filter.categories'])
     .subscribe(translations => {
