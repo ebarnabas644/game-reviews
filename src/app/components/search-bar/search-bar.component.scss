@@ -3,13 +3,13 @@ button{
     background-color: transparent;
 }
 input{
-    border-radius: 15px;
     border-style: none;
     background-color: transparent;
     height: 30px;
     font-size: 20px;
     padding: 5px;
-    color: var(--text-color);;
+    width: 70%;
+    color: var(--text-color);
 }
 input:focus{
     outline-width: 0px;
@@ -23,6 +23,7 @@ input:focus{
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 mat-icon{
     color: var(--text-color);

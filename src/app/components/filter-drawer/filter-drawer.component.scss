@@ -36,8 +36,14 @@ a:hover{
     background-color: var(--accent-color);
     transition: background-color 0.5s ease;
     width: 250px;
+    height: 100%;
 }
 
 .content{
     width: calc(100% - 250px);
+    touch-action: pan-y !important;
+}
+
+.container{
+    height: 100%;
 }

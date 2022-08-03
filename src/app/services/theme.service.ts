@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeService {
+export class ThemeService{
 
   private darkMode = new BehaviorSubject<boolean>(false);
 
@@ -12,8 +13,18 @@ export class ThemeService {
     return this.darkMode.asObservable()
   }
 
-  public toggleDarkMode(newDarkMode: boolean): void{
+  public setDarkMode(newDarkMode: boolean): void{
     this.darkMode.next(newDarkMode)
+    this.cookieService.set("darkMode", newDarkMode+"")
   }
-  constructor() { }
+  constructor(private cookieService: CookieService) {
+    this.tryLoadDarkModeStateFromCookie()
+   }
+
+  tryLoadDarkModeStateFromCookie(){
+    let cookieDarkMode = this.cookieService.get("darkMode")
+    if(cookieDarkMode != ""){
+      this.setDarkMode(cookieDarkMode === "true")
+    }
+  }
 }

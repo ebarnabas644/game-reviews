@@ -29,7 +29,6 @@ export class FilterOptionComponent implements OnInit {
     else{
       this.height = 0
     }
-    console.log("clicked")
   }
 
   onChange(event: any){

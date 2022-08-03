@@ -64,7 +64,6 @@ export class DetailPageComponent implements OnInit {
 
   updateTitle(): void{
     this.toolbarService.updateTitle(this.game.name)
-    console.log("updated")
   }
 
 }

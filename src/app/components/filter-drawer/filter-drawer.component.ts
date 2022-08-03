@@ -7,6 +7,7 @@ import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { GameDataService } from 'src/app/services/game-data.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-filter-drawer',
@@ -20,8 +21,9 @@ export class FilterDrawerComponent implements OnInit {
   desktopStatusSubscription!: Subscription
   filterSubscription!: Subscription
   darkMode!: boolean
+  genresLabel!: string
 
-  constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService, private filterService: FilterService, private gameDataService: GameDataService, private themeService: ThemeService) {
+  constructor(private drawerService: FilterDrawerService, private desktopModeService: DesktopModeService, private filterService: FilterService, private gameDataService: GameDataService, private themeService: ThemeService, private translate: TranslateService) {
    }
 
   ngOnInit(): void {
@@ -42,4 +44,5 @@ export class FilterDrawerComponent implements OnInit {
   ngOnDestroy(): void{
     this.desktopStatusSubscription.unsubscribe()
   }
+
 }

@@ -1,6 +1,6 @@
 <mat-toolbar>
     <mat-toolbar-row *ngIf="isHomeView()">
-        <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
         <span>New & Trending games</span>
     </mat-toolbar-row>
 
@@ -8,10 +8,10 @@
         <div class="content">
             <div class="center">
                 <div class="center">
-                    <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+                    <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
                     <span>Search</span>
                 </div>
-                <div class="center">
+                <div class="center search">
                     <app-search-bar></app-search-bar>
                 </div>
                 <div class="center">
@@ -21,7 +21,7 @@
         </div>
     </mat-toolbar-row>
     <mat-toolbar-row *ngIf="isGameView()">
-        <mat-icon class="example-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span>{{title}}</span>
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span class="title">{{title}}</span>
     </mat-toolbar-row>
 </mat-toolbar>
