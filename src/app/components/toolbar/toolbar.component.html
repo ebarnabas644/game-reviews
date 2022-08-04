@@ -1,7 +1,7 @@
 <mat-toolbar>
     <mat-toolbar-row *ngIf="isHomeView()">
         <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span>New & Trending games</span>
+        <span>{{'toolbar.trending' | translate}}</span>
     </mat-toolbar-row>
 
     <mat-toolbar-row *ngIf="isSearchView()">
@@ -9,7 +9,7 @@
             <div class="center">
                 <div class="center">
                     <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-                    <span>Search</span>
+                    <span>{{'toolbar.search' | translate}}</span>
                 </div>
                 <div class="center search">
                     <app-search-bar></app-search-bar>
