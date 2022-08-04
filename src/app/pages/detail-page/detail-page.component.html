@@ -1,6 +1,6 @@
 <div>
     <div class="highlight">
-        <div class="gallery">
+        <div class="gallery detail-card">
             <div #outer class="outer-selected" (window:resize)="onResize($event)">
                 <div class="inner-selected" [ngStyle]="{'margin-left': -offset + 'px'}">
                     <img #bigscreenshot class="big-screenshot" *ngFor="let image of images" [ngClass]="image === selectedImage ? 'selected' : ''" src="{{image}}">
@@ -11,15 +11,36 @@
                 <img class="screenshot" *ngFor="let image of images" [ngClass]="image === selectedImage ? 'selected' : ''" src="{{image}}" (click)="setSelected(image)">
             </div>
         </div>
-        <div class="short-description">
-            {{game.short_description}}
-            <br>
-            {{game.developers}}
-            <br>
-            {{game.publishers}}
+        <div class="short-description detail-card header">
+            <img [src]="game.header_image" class="header">
+            <div class="short-description-text">
+                {{game.short_description}}
+                <div class="developers">
+                <strong>{{'detail.developers' | translate}}:</strong> {{game.developers}}
+                <br>
+                <strong>{{'detail.publishers' | translate}}:</strong> {{game.publishers}}
+                </div>
+                <a target=”_blank” href="https://store.steampowered.com/app/{{game.steam_appid}}/" class="button">
+                    <img src="src=../../../assets/icons/steam.png">
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="description" innerHTML="{{game.detailed_description}}"></div>
+    <div class="description detail-card" innerHTML="{{game.detailed_description}}">
+    </div>
+    <div class="description detail-card" *ngIf="game.reviews">
+        <h1>{{'detail.reviews' | translate}}:</h1>
+        <div innerHTML="{{game.reviews}}"></div>
+    </div>
+    <div class="detail-card pc-requirements">
+        <h1>{{'detail.system-requirements' | translate}}</h1>
+        <div class="description pc-requirements-content">
+            <div innerHTML="{{game.pc_requirements_min}}">
+            </div>
+            <div innerHTML="{{game.pc_requirements_recommended}}">
+            </div>
+        </div>
+    </div>
 </div>
 
