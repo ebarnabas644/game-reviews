@@ -14,11 +14,11 @@
         <div class="short-description detail-card header">
             <img [src]="game.header_image" class="header">
             <div class="short-description-text">
-                {{game.short_description}}
+                <div [innerHTML]="game.short_description"></div>
                 <div class="developers">
-                <strong>{{'detail.developers' | translate}}:</strong> {{game.developers}}
+                <strong>{{'detail.developers' | translate}}:</strong> <div [innerHTML]="game.developers"></div>
                 <br>
-                <strong>{{'detail.publishers' | translate}}:</strong> {{game.publishers}}
+                <strong>{{'detail.publishers' | translate}}:</strong> <div [innerHTML]="game.publishers"></div>
                 </div>
                 <a target=”_blank” href="https://store.steampowered.com/app/{{game.steam_appid}}/" class="button">
                     <img src="src=../../../assets/icons/steam.png">
