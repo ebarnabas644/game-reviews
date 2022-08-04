@@ -1,6 +1,17 @@
 {
     "filter":{
+        "options": "Filter options",
         "genres": "Genres",
         "categories": "Categories"
+    },
+    "detail":{
+        "developers": "Developers",
+        "publishers": "Publishers",
+        "reviews": "Reviews",
+        "system-requirements": "System requirements"
+    },
+    "toolbar":{
+        "trending": "New & Trending games",
+        "search": "Search"
     }
 }
