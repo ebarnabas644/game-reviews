@@ -3,6 +3,7 @@ import { DesktopModeService } from './services/desktop-mode.service';
 import { ThemeService } from './services/theme.service';
 import { NgcCookieConsentService } from 'ngx-cookieconsent';
 import { TranslateService } from '@ngx-translate/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -14,17 +15,17 @@ export class AppComponent implements OnInit{
   desktopWidth = 900;
   darkMode = false
 
-  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService, private translate: TranslateService){
+  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService, private translate: TranslateService, private cookieService: CookieService){
   }
 
   ngOnInit(): void{
     this.translate.addLangs(['en-GB', 'de-DE']);
     this.translate.setDefaultLang('en-GB');
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
-    this.translate.get(['filter.categories'])
-    .subscribe(translations => {
-      console.log(translations['filter.categories'])
-    });
+    let cookieLanguage = this.cookieService.get("language")
+    if(cookieLanguage != ""){
+      this.translate.use(cookieLanguage)
+    }
   }
 
   ngAfterViewInit(): void{

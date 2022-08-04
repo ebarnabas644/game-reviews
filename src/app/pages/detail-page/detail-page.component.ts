@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
@@ -10,7 +10,8 @@ import { ToolbarService } from 'src/app/services/toolbar.service';
 @Component({
   selector: 'app-detail-page',
   templateUrl: './detail-page.component.html',
-  styleUrls: ['./detail-page.component.scss']
+  styleUrls: ['./detail-page.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DetailPageComponent implements OnInit, OnDestroy {
 

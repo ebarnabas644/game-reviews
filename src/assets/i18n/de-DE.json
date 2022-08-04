@@ -1,6 +1,17 @@
 {
     "filter":{
+        "options": "Filter optionen",
         "genres": "Genres",
         "categories": "Kategorien"
+    },
+    "detail":{
+        "developers": "Entwickler",
+        "publishers": "Publisher",
+        "reviews": "Rezensiomen",
+        "system-requirements": "Systemanforderungen"
+    },
+    "toolbar":{
+        "trending": "Neu & Angesagt",
+        "search": "Suchen"
     }
 }

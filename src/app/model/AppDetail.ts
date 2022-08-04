@@ -23,5 +23,7 @@ export interface AppDetail{
     screenshots_full: string,
     recommendations: number,
     coming_soon: boolean,
-    date: string
+    date: string,
+    pc_requirements_min: string,
+    pc_requirements_recommended: string
 }
