@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
@@ -15,7 +16,7 @@ export class ToolbarComponent implements OnInit {
   desktopMode = true
   title!: String
 
-  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService) { }
+  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService, private tranlate: TranslateService) { }
 
   toggleNavigationDrawer(): void{
     this.navigationDrawerService.toggle()
