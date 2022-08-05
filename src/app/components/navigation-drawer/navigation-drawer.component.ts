@@ -31,7 +31,7 @@ export class DrawerComponent implements OnInit {
 
   ngOnInit(): void {
     this.languageList = this.translator.getLangs()
-    this.selectedLanguageFlag = this.flagList[this.languageList.indexOf(this.translator.currentLang)]
+    this.selectedLanguageFlag = this.flagList[this.languageList.indexOf(this.translator.defaultLang)]
     console.log(this.languageList)
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
     this.desktopStatusSubscription = this.desktopModeService

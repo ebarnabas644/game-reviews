@@ -15,7 +15,7 @@ export class ThemeService{
 
   public setDarkMode(newDarkMode: boolean): void{
     this.darkMode.next(newDarkMode)
-    this.cookieService.set("darkMode", newDarkMode+"")
+    this.cookieService.set("darkMode", newDarkMode+"", { path: "/"})
   }
   constructor(private cookieService: CookieService) {
     this.tryLoadDarkModeStateFromCookie()
