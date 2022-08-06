@@ -48,6 +48,8 @@ import { GenreSelectorComponent } from './components/filter-drawer/components/ge
 import { CategorySelectorComponent } from './components/filter-drawer/components/category-selector/category-selector.component';
 import { OperatingSystemSelectorComponent } from './components/filter-drawer/components/operating-system-selector/operating-system-selector.component';
 import { LanguagePipe } from './tools/LanguagePipe';
+import { CookieServiceWrapperService } from './services/cookie-service-wrapper.service';
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -117,7 +119,7 @@ const cookieConfig:NgcCookieConsentConfig = {
   }),
   NgcCookieConsentModule.forRoot(cookieConfig)
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService, LanguagePipe],
+  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService, LanguagePipe, CookieServiceWrapperService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

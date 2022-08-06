@@ -6,8 +6,8 @@ import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Location } from '@angular/common';
-import { CookieService } from 'ngx-cookie-service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { CookieServiceWrapperService } from 'src/app/services/cookie-service-wrapper.service';
 
 @Component({
   selector: 'app-drawer',
@@ -26,12 +26,12 @@ export class DrawerComponent implements OnInit {
   languageList!: string[]
   languageSelectorVisibility: boolean = false
 
-  constructor(private drawerService: NavigationDrawerService, private desktopModeService: DesktopModeService, private themeService: ThemeService, private router: Router, private location: Location, private cookieService: CookieService, private translator: TranslateService) {
+  constructor(private drawerService: NavigationDrawerService, private desktopModeService: DesktopModeService, private themeService: ThemeService, private router: Router, private location: Location, private cookieService: CookieServiceWrapperService, private translator: TranslateService) {
    }
 
   ngOnInit(): void {
     this.languageList = this.translator.getLangs()
-    this.selectedLanguageFlag = this.flagList[this.languageList.indexOf(this.translator.defaultLang)]
+    this.selectedLanguageFlag = this.flagList[this.languageList.indexOf(this.translator.currentLang)]
     console.log(this.languageList)
     this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
     this.desktopStatusSubscription = this.desktopModeService
