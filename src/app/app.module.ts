@@ -50,6 +50,17 @@ import { OperatingSystemSelectorComponent } from './components/filter-drawer/com
 import { LanguagePipe } from './tools/LanguagePipe';
 import { CookieServiceWrapperService } from './services/cookie-service-wrapper.service';
 
+//Firebase
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from 'src/environments/environment';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { SignInComponent } from './pages/login-page/components/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/login-page/components/sign-up/sign-up.component';
+import { VerifyEmailComponent } from './pages/login-page/components/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from './pages/login-page/components/forgot-password/forgot-password.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -90,9 +101,18 @@ const cookieConfig:NgcCookieConsentConfig = {
     GameDisplayComponent,
     GenreSelectorComponent,
     CategorySelectorComponent,
-    OperatingSystemSelectorComponent
+    OperatingSystemSelectorComponent,
+    LoginPageComponent,
+    SignInComponent,
+    SignUpComponent,
+    VerifyEmailComponent,
+    ForgotPasswordComponent
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

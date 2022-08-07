@@ -47,4 +47,20 @@ export class ToolbarComponent implements OnInit {
     return this.router.url.match('^/search/.*$');
   }
 
+  isSignInView(){
+    return this.router.url.match('^/sign-in$');
+  }
+
+  isSignUpView(){
+    return this.router.url.match('^/register-user$');
+  }
+
+  isVerifyEmailView(){
+    return this.router.url.match('^/verify-email-address$');
+  }
+
+  isForgotPasswordView(){
+    return this.router.url.match('^/forgot-password$');
+  }
+
 }
