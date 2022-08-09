@@ -53,8 +53,6 @@ import { CookieServiceWrapperService } from './services/cookie-service-wrapper.s
 //Firebase
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { SignInComponent } from './pages/login-page/components/sign-in/sign-in.component';
@@ -68,7 +66,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const cookieConfig:NgcCookieConsentConfig = {
   cookie: {
-    domain: '192.168.2.139' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
+    domain: 'game-finder-425ea.web.app' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
   },
   palette: {
     popup: {
@@ -111,8 +109,6 @@ const cookieConfig:NgcCookieConsentConfig = {
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    AngularFirestoreModule,
-    AngularFireStorageModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
