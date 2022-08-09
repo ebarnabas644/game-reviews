@@ -1,13 +1,14 @@
 <div (window:resize)="onResize()" class="box">
     <cdk-virtual-scroll-viewport #scroller itemSize="{{rowHeight}}" class="cdk-viewport">
-        <ng-container *ngIf="gridList.length">
-            <mat-list class="content">
-                <ng-container *cdkVirtualFor="let items of gridList;  trackBy: trackByFn">
-                    <div #row>
-                        <app-game-list-item [games]="items"></app-game-list-item>
-                    </div>
-                </ng-container>
-            </mat-list>
-        </ng-container>
+        <div *ngIf="isLoading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            <ng-container>
+                <mat-list class="content">
+                    <ng-container *cdkVirtualFor="let items of gridList;  trackBy: trackByFn">
+                        <div #row>
+                            <app-game-list-item [games]="items"></app-game-list-item>
+                        </div>
+                    </ng-container>
+                </mat-list>
+            </ng-container>
     </cdk-virtual-scroll-viewport>
 </div>
