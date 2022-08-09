@@ -10,6 +10,7 @@ import { FilterService } from 'src/app/services/filter.service';
 import { AppOther } from 'src/app/model/AppOther';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { TitleStrategy } from '@angular/router';
 
 @UntilDestroy()
 @Component({
@@ -21,7 +22,10 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 export class GameListComponent implements OnInit, OnDestroy {
   gameListCache: AppDetail[] = []
   newData: AppDetail[] = []
-  @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
+  private scrollerElement!: CdkVirtualScrollViewport
+  @ViewChild('scroller') set scroller(scroller: CdkVirtualScrollViewport){
+      this.scrollerElement = scroller
+  };
   @ViewChild('row') testHeight!: ElementRef
   rowHeight: number = 315
   cardPerRow: number = 1
@@ -36,34 +40,40 @@ export class GameListComponent implements OnInit, OnDestroy {
   categoryFilter: string = ""
   osSelection: number[] = [-1,-1,-1]
   currentLanguage!: string
+  isLoading = false
+  lastBatch = false
 
-  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private cdr: ChangeDetectorRef, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef, private translate: TranslateService) { }
+  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.currentLanguage = this.translate.currentLang
-    this.gameDataService.resetBatchIndex()
+    
+    //this.gameDataService.resetBatchIndex()
     this.onLanguageChangeSubscribe()
     this.searchSubscription()
     this.genreFilterSubscription()
     this.categoryFilterSubscription()
     this.osSelectionSubscription()
+    this.LoadingSubscription()
+    
+    //this.gameDataService.resetSearch()
     this.fetchSubscribe()
     this.onResize()
-    console.log(this.cardPerRow)
+
+    //this.setSearchParameters()
   }
 
   
-  fetchData(): void{
+  searchWithDelay(): void{
     window.clearTimeout(this.timeout)
-
     if(this.firstStartUp){
       this.interval = 0
       this.firstStartUp = false
     }
     else{
-      this.interval = 200
+      this.interval = 500
     }
-    this.timeout = window.setTimeout(() => this.fetchSubscribe(), this.interval)
+    this.timeout = window.setTimeout(() => this.setSearchParameters(), this.interval)
   }
 
   onLanguageChangeSubscribe(){
@@ -73,22 +83,46 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   fetchSubscribe(): void{
-    this.gameDataService.getGameDetailBatch({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection, language: this.currentLanguage }).pipe(untilDestroyed(this)).subscribe({
-      next: (data) => this.fillCache(data),
-      error: (err) => console.log(err),
-      complete: () => { 
-        this.ref.markForCheck();
-        }})
+    this.gameDataService.gameData$.pipe(untilDestroyed(this)).subscribe(
+      data => {
+          this.searchService.updateIsLoading(true)
+          this.ref.markForCheck()
+          if(data.length != 0){
+            this.gameListCache = data
+            console.log(this.gameListCache)
+            this.splitDataIntoGrid()
+            this.isLoading = false
+          }
+          else{
+            this.lastBatch = true
+            console.log("last reached")
+          }
+          this.searchService.updateIsLoading(false)
+          this.ref.markForCheck()
+      }
+    )
+  }
+
+  setSearchParameters(){
+    this.resetGrid()
+    this.searchService.updateIsLoading(true)
+    this.ref.markForCheck()
+    this.gameDataService.modifyQueryParameters({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection, language: this.currentLanguage })
   }
 
   fillCache(data: AppDetail[]): void{
+    this.gameListCache = data
     console.log(data)
-    data.forEach(item => this.gameListCache.push(item))
     this.splitDataIntoGrid()
   }
 
   splitDataIntoGrid(): void{
-    var row: AppDetail[] = []
+    let row: AppDetail[] = []
+    if(this.gridList.length > 0){
+      if(this.gridList[this.gridList.length - 1].length < this.cardPerRow){
+        row = this.gridList.pop()!
+      }
+    }
     var temp: AppDetail[][] = []
     this.gameListCache.forEach(item => {
       row.push(this.removeInvalidCharacters(item))
@@ -97,15 +131,17 @@ export class GameListComponent implements OnInit, OnDestroy {
         row = []
       }
     })
-    temp.push(row)
-    this.gridList = [...temp]
+    if(row.length != 0){
+      temp.push(row)
+    }
+    this.gridList = [...this.gridList, ...temp]
   }
 
   private searchSubscription(){
     this.searchService.getAppName().pipe(untilDestroyed(this)).subscribe(name => {
       this.currentSearchName = name
       this.resetScroller()
-      this.fetchData()
+      this.searchWithDelay()
     })
   }
 
@@ -113,7 +149,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.filterService.getGenres().pipe(untilDestroyed(this)).subscribe(genres => {
       this.genresFilter = this.convertArrayToString(genres)
       this.resetScroller();
-      this.fetchData();
+      this.searchWithDelay()
     });
   }
 
@@ -121,7 +157,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.filterService.getCategories().pipe(untilDestroyed(this)).subscribe(categories => {
       this.categoryFilter = this.convertArrayToString(categories)
       this.resetScroller();
-      this.fetchData();
+      this.searchWithDelay()
     });
   }
 
@@ -129,12 +165,14 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.filterService.getOsSelection().pipe(untilDestroyed(this)).subscribe(selection =>{
       this.osSelection = selection
       this.resetScroller();
-      this.fetchData();
+      this.searchWithDelay()
     })
   }
 
-  private comingsoonFilterSubscription(){
-    
+  private LoadingSubscription(){
+    this.searchService.getIsLoading().pipe(untilDestroyed(this)).subscribe(value => {
+      this.isLoading = value
+    })
   }
 
   private convertArrayToString(array: AppOther[]): string{
@@ -146,22 +184,30 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(): void{
     this.setupScroller()
-    this.updateRowHeight()
   }
 
+  resetGrid(){
+    this.resetScroller()
+    this.lastBatch = false
+    this.gridList = []
+    this.gameListCache = []
+    this.gameDataService.resetSearch()
+  }
 
   resetSearch(){
     this.resetScroller()
     this.currentSearchName = ""
-    this.fetchData()
+    this.lastBatch = false
+    this.gridList = []
+    this.gameListCache = []
+    this.gameDataService.resetSearch()
+    //this.gameDataService.getNextBatch()
   }
 
   resetScroller(){
-    if(this.scroller != undefined){
-      this.scroller.scrollToIndex(0);
+    if(this.scrollerElement != undefined){
+      this.scrollerElement.scrollToIndex(0);
     }
-    this.gameDataService.resetBatchIndex()
-    this.gameListCache = []
   }
 
   onResize() {
@@ -171,30 +217,20 @@ export class GameListComponent implements OnInit, OnDestroy {
     if(temp != this.cardPerRow){
       this.splitDataIntoGrid()
     }
-
-    this.updateRowHeight()
-  }
-
-  updateRowHeight(): void{
-    if(this.testHeight != undefined){
-      this.rowHeight = this.testHeight.nativeElement.offsetHeight
-      this.cdr.detectChanges()
-      console.log(this.rowHeight)
-    }
-    else{
-      console.log("No row height avaiable")
-    }
   }
 
   setupScroller(): void{
-    this.scroller.elementScrolled().pipe(
-      map(() => this.scroller.measureScrollOffset('bottom')),
+    this.scrollerElement.elementScrolled().pipe(
+      map(() => this.scrollerElement.measureScrollOffset('bottom')),
       pairwise(),
       filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
       throttleTime(500)
     ).pipe(untilDestroyed(this)).subscribe(() => {
       this.ngZone.run(() => {
-       this.fetchData();
+        if(!this.lastBatch){
+          this.gameDataService.getNextBatch()
+          console.log("scroll")
+        }
       });
     })
   }
