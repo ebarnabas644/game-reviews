@@ -1,22 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@ngx-translate/core';
 import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { FilterDrawerService } from 'src/app/services/filter-drawer.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
+import { SearchService } from 'src/app/services/search.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
 
   desktopMode = true
   title!: String
 
-  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService, private tranlate: TranslateService) { }
+  constructor(private navigationDrawerService: NavigationDrawerService, private filterDrawerService: FilterDrawerService, private router: Router, private desktopModeService: DesktopModeService, private toolbarService: ToolbarService, private tranlate: TranslateService, private searchService: SearchService) { }
 
   toggleNavigationDrawer(): void{
     this.navigationDrawerService.toggle()
@@ -29,10 +32,11 @@ export class ToolbarComponent implements OnInit {
   ngOnInit(): void {
     this.desktopModeService
       .getDesktopModeStatus()
+      .pipe(untilDestroyed(this))
       .subscribe(mode => {
         this.desktopMode = mode
       })
-      this.toolbarService.getTitle().subscribe(title => this.title = title)
+      this.toolbarService.getTitle().pipe(untilDestroyed(this)).subscribe(title => this.title = title)
   }
 
   isHomeView() {
@@ -61,6 +65,9 @@ export class ToolbarComponent implements OnInit {
 
   isForgotPasswordView(){
     return this.router.url.match('^/forgot-password$');
+  }
+
+  ngOnDestroy(): void {
   }
 
 }
