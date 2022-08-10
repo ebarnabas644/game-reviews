@@ -12,7 +12,11 @@
     },
     "toolbar":{
         "trending": "Neu & Angesagt",
-        "search": "Suchen"
+        "search": "Suchen",
+        "sign-in": "Login",
+        "sign-up": "Register",
+        "verify-email": "Verify email",
+        "forgot-password": "Forgot password"
     },
     "cookie": {
         "header": "Cookies used on the website!",

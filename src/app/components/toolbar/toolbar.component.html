@@ -20,8 +20,29 @@
             </div>
         </div>
     </mat-toolbar-row>
+
     <mat-toolbar-row *ngIf="isGameView()">
         <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
         <span class="title">{{title}}</span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="isSignInView()">
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span class="title">{{'toolbar.sign-in' | translate}}</span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="isSignUpView()">
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span class="title">{{'toolbar.sign-up' | translate}}</span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="isVerifyEmailView()">
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span class="title">{{'toolbar.verify-email' | translate}}</span>
+    </mat-toolbar-row>
+
+    <mat-toolbar-row *ngIf="isForgotPasswordView()">
+        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
+        <span class="title">{{'toolbar.forgot-password' | translate}}</span>
     </mat-toolbar-row>
 </mat-toolbar>

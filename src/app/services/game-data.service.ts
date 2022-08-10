@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpClientModule, HttpParams } from '@angular/common/http'
-import { BehaviorSubject, Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { AppBase } from '../model/AppBase';
 import { AppDetail } from '../model/AppDetail';
 import { AppOther } from '../model/AppOther';
 import { LanguagePipe } from '../tools/LanguagePipe';
+import { SearchParameters } from '../model/SearchParameters';
 
 const batchSize = 20;
+const defaultParams: SearchParameters = {
+  name: "",
+  supportedLanguages: "",
+  osSelection: [-1,-1,-1],
+  min_metacritic_score: -1,
+  coming_soon: -1,
+  genres: "",
+  categories: "",
+  language: "english"
+}
 @Injectable({
   providedIn: 'root'
 })
 export class GameDataService {
-  private apiBaseUrl = "http://192.168.2.139:8080"
+  private apiBaseUrl = "https://main.game-reviews-api-server.net:8080"
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
   private gameListPath = "/api/appList"
   private gameDetailPath = "/api/detailList"
@@ -20,14 +31,70 @@ export class GameDataService {
   private gameCategoryListPath = "/api/categoryList/"
   private gameFeaturedPath = "/api/featured/"
   //private gameListPath = "/GetAppList/v0002/?format=json"
-  private currentIndex = -batchSize
+  private currentParams!: SearchParameters
+  private currentIndex = 0
+  private gameDataPath = this.apiBaseUrl + this.gameDetailPath
   
+
+  private parametersSubject = new Subject<SearchParameters>()
+  parameterChangeAction$ = this.parametersSubject.asObservable()
+  gameData$ = this.parameterChangeAction$.pipe(switchMap(params => 
+    this.http.get<AppDetail[]>(this.gameDataPath+`/getBatch/${this.currentIndex}`, {
+      params: { l: this.languagePipe.transform(params.language),
+                size: batchSize,
+                name: `${params.name}`,
+                supportedLanguages: `${params.supportedLanguages}`,
+                windows: params.osSelection[0] == -1 ? "" : params.osSelection[0],
+                mac: params.osSelection[2] == -1 ? "" : params.osSelection[2],
+                linux: params.osSelection[1] == -1 ? "" : params.osSelection[1],
+                min_metacritic_score: params.min_metacritic_score == -1 ? "" : params.min_metacritic_score,
+                coming_soon: params.coming_soon == -1 ? "" : params.coming_soon,
+                genres: params.genres,
+                categories: params.categories
+                 }
+    })))
+
+  modifyQueryParameters({ name,
+    supportedLanguages = "",
+    osSelection = [-1,-1,-1],
+    min_metacritic_score = -1,
+    coming_soon = -1,
+    genres = "",
+    categories = "",
+    language = "english"
+  }:
+  { name: string,
+    supportedLanguages?: string,
+    osSelection?: number[],
+    min_metacritic_score?: number,
+    coming_soon?: number,
+    genres?: string,
+    categories?: string,
+    language?: string
+  }){
+    this.currentParams = {
+      name,
+      supportedLanguages,
+      osSelection,
+      min_metacritic_score,
+      coming_soon,
+      genres,
+      categories,
+      language
+    }
+    this.parametersSubject.next(this.currentParams)
+  }
+
+  getNextBatch(){
+    this.currentIndex += batchSize
+    this.parametersSubject.next(this.currentParams)
+  }
 
   constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
    }
 
    resetBatchIndex(){
-    this.currentIndex = -batchSize
+    this.currentIndex = 0
    }
 
   getGameBaseData(): Observable<AppBase[]>{
@@ -37,41 +104,9 @@ export class GameDataService {
     })
   }
 
-  getGameDetailBatch(
-    { name,
-      supportedLanguages = "",
-      osSelection = [-1,-1,-1],
-      min_metacritic_score = -1,
-      coming_soon = -1,
-      genres = "",
-      categories = "",
-      language = "english"
-    }:
-    { name: string,
-      supportedLanguages?: string,
-      osSelection?: number[],
-      min_metacritic_score?: number,
-      coming_soon?: number,
-      genres?: string,
-      categories?: string,
-      language?: string
-    }): Observable<AppDetail[]>{
-    const buildUrl = this.apiBaseUrl + this.gameDetailPath
-    console.log("Getting game detail batch, current index: "+this.currentIndex)
-    return this.http.get<AppDetail[]>(buildUrl+`/getBatch/${this.currentIndex+=batchSize}`, {
-      params: { l: this.languagePipe.transform(language),
-                size: batchSize,
-                name: `${name}`,
-                supportedLanguages: `${supportedLanguages}`,
-                windows: osSelection[0] == -1 ? "" : osSelection[0],
-                mac: osSelection[2] == -1 ? "" : osSelection[2],
-                linux: osSelection[1] == -1 ? "" : osSelection[1],
-                min_metacritic_score: min_metacritic_score == -1 ? "" : min_metacritic_score,
-                coming_soon: coming_soon == -1 ? "" : coming_soon,
-                genres: genres,
-                categories: categories
-                 }
-    })
+  resetSearch(){
+    this.currentIndex = 0
+    this.modifyQueryParameters(defaultParams)
   }
 
   getGameDetail(appid: number, language: string): Observable<AppDetail>{

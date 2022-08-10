@@ -50,6 +50,15 @@ import { OperatingSystemSelectorComponent } from './components/filter-drawer/com
 import { LanguagePipe } from './tools/LanguagePipe';
 import { CookieServiceWrapperService } from './services/cookie-service-wrapper.service';
 
+//Firebase
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { environment } from 'src/environments/environment';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { SignInComponent } from './pages/login-page/components/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/login-page/components/sign-up/sign-up.component';
+import { VerifyEmailComponent } from './pages/login-page/components/verify-email/verify-email.component';
+import { ForgotPasswordComponent } from './pages/login-page/components/forgot-password/forgot-password.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -57,7 +66,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const cookieConfig:NgcCookieConsentConfig = {
   cookie: {
-    domain: '192.168.2.139' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
+    domain: 'game-finder-425ea.web.app' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
   },
   palette: {
     popup: {
@@ -90,9 +99,16 @@ const cookieConfig:NgcCookieConsentConfig = {
     GameDisplayComponent,
     GenreSelectorComponent,
     CategorySelectorComponent,
-    OperatingSystemSelectorComponent
+    OperatingSystemSelectorComponent,
+    LoginPageComponent,
+    SignInComponent,
+    SignUpComponent,
+    VerifyEmailComponent,
+    ForgotPasswordComponent
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
