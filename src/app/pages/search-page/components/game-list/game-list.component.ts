@@ -57,8 +57,9 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.LoadingSubscription()
     
     //this.gameDataService.resetSearch()
-    this.fetchSubscribe()
+    this.gameDataService.setBatchSize(5*this.cardPerRow)
     this.onResize()
+    this.fetchSubscribe()
 
     //this.setSearchParameters()
   }
@@ -217,8 +218,12 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
     if(temp != this.cardPerRow){
+      this.gameDataService.setBatchSize(5*this.cardPerRow)
       this.rerenderGrid()
       this.ref.detectChanges()
+      if(!this.scrollbarVisible(this.scrollerElement) && !this.lastBatch){
+        this.gameDataService.getNextBatch()
+      }
     }
   }
 
@@ -236,6 +241,10 @@ export class GameListComponent implements OnInit, OnDestroy {
         }
       });
     })
+  }
+
+  scrollbarVisible(element: CdkVirtualScrollViewport) {
+    return element.elementRef.nativeElement.scrollHeight > element.elementRef.nativeElement.clientHeight;
   }
 
   removeInvalidCharacters(data: AppDetail): AppDetail{
