@@ -110,12 +110,6 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.gameDataService.modifyQueryParameters({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection, language: this.currentLanguage })
   }
 
-  fillCache(data: AppDetail[]): void{
-    this.gameListCache = data
-    console.log(data)
-    this.splitDataIntoGrid()
-  }
-
   splitDataIntoGrid(): void{
     let row: AppDetail[] = []
     if(this.gridList.length > 0){
@@ -210,12 +204,21 @@ export class GameListComponent implements OnInit, OnDestroy {
     }
   }
 
+  rerenderGrid(){
+    this.gameListCache = []
+    this.gridList.forEach(row => row.forEach(item => this.gameListCache.push(item)))
+    this.gridList = []
+    console.log(this.gameListCache)
+    this.splitDataIntoGrid()
+  }
+
   onResize() {
     var temp = this.cardPerRow
     this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
     console.log(this.cardPerRow)
     if(temp != this.cardPerRow){
-      this.splitDataIntoGrid()
+      this.rerenderGrid()
+      this.ref.detectChanges()
     }
   }
 
