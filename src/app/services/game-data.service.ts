@@ -7,7 +7,6 @@ import { AppOther } from '../model/AppOther';
 import { LanguagePipe } from '../tools/LanguagePipe';
 import { SearchParameters } from '../model/SearchParameters';
 
-const batchSize = 20;
 const defaultParams: SearchParameters = {
   name: "",
   supportedLanguages: "",
@@ -24,6 +23,7 @@ const defaultParams: SearchParameters = {
 export class GameDataService {
   private apiBaseUrl = "https://main.game-reviews-api-server.net:8080"
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
+  private batchSize = 12
   private gameListPath = "/api/appList"
   private gameDetailPath = "/api/detailList"
   private gameGenreListPath = "/api/genreList/"
@@ -41,7 +41,7 @@ export class GameDataService {
   gameData$ = this.parameterChangeAction$.pipe(switchMap(params => 
     this.http.get<AppDetail[]>(this.gameDataPath+`/getBatch/${this.currentIndex}`, {
       params: { l: this.languagePipe.transform(params.language),
-                size: batchSize,
+                size: this.batchSize,
                 name: `${params.name}`,
                 supportedLanguages: `${params.supportedLanguages}`,
                 windows: params.osSelection[0] == -1 ? "" : params.osSelection[0],
@@ -85,8 +85,12 @@ export class GameDataService {
     this.parametersSubject.next(this.currentParams)
   }
 
+  setBatchSize(newSize: number){
+    this.batchSize = newSize
+  }
+
   getNextBatch(){
-    this.currentIndex += batchSize
+    this.currentIndex += this.batchSize
     this.parametersSubject.next(this.currentParams)
   }
 
