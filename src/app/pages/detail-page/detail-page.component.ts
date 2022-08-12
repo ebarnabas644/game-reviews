@@ -5,6 +5,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { AppDetail } from 'src/app/model/AppDetail';
 import { GameDataService } from 'src/app/services/game-data.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
+import { WishlistService } from 'src/app/services/wishlist.service';
 
 @UntilDestroy()
 @Component({
@@ -21,11 +22,18 @@ export class DetailPageComponent implements OnInit, OnDestroy {
   images!: string[]
   selectedImage!: string
   offset: number = 0
-  @ViewChild('outer') outer!: ElementRef
-  @ViewChildren('bigscreenshot') bigScreenshot!: QueryList<ElementRef>
+  private outer!: ElementRef
+  @ViewChild('outer') set outerElement(element: ElementRef){
+    this.outer = element
+  }
+  private bigScreenshot!: QueryList<ElementRef>
+  @ViewChildren('bigscreenshot') set bigScreenshotElements(elements: QueryList<ElementRef>){
+    this.bigScreenshot = elements
+  }
   currentLanguage!: string
+  isLoading: boolean = true
 
-  constructor(private route: ActivatedRoute, private gameDataService: GameDataService, private toolbarService: ToolbarService, private translate: TranslateService) { }
+  constructor(private route: ActivatedRoute, private gameDataService: GameDataService, private toolbarService: ToolbarService, private translate: TranslateService, private wishlistService: WishlistService) { }
 
   ngOnInit(): void {
     this.currentLanguage = this.translate.currentLang
@@ -49,13 +57,25 @@ export class DetailPageComponent implements OnInit, OnDestroy {
   }
 
   loadGameDetailSubscribe(id: number): void{
-    this.gameDataService.getGameDetail(id,this.currentLanguage).pipe(untilDestroyed(this)).subscribe(game => {
-      this.game = this.removeInvalidCharacters(game)
-      this.images = this.game.screenshots_full.split(',')
-      this.selectedImage = this.images[0]
-      this.updateTitle()
-    }
-      )
+    this.gameDataService.getGameDetail(id,this.currentLanguage).pipe(untilDestroyed(this)).subscribe({
+      next: (game) => {
+        this.isLoading = true
+        this.game = this.removeInvalidCharacters(game)
+        this.images = this.game.screenshots_full.split(',')
+        this.selectedImage = this.images[0]
+        this.updateTitle()
+        this.isLoading = false
+      },
+      complete: () => {
+        this.updateFavouriteCache()
+      }
+    })
+  }
+
+  updateFavouriteCache(){
+    this.wishlistService.getFavouriteState(this.game.steam_appid).pipe(untilDestroyed(this)).subscribe(state => {
+      this.wishlistService.toggleFavouriteCache(state.found)
+    })
   }
 
   removeInvalidCharacters(data: AppDetail): AppDetail{
