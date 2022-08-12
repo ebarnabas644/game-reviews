@@ -15,7 +15,8 @@ const defaultParams: SearchParameters = {
   coming_soon: -1,
   genres: "",
   categories: "",
-  language: "english"
+  language: "english",
+  user: ""
 }
 @Injectable({
   providedIn: 'root'
@@ -50,9 +51,14 @@ export class GameDataService {
                 min_metacritic_score: params.min_metacritic_score == -1 ? "" : params.min_metacritic_score,
                 coming_soon: params.coming_soon == -1 ? "" : params.coming_soon,
                 genres: params.genres,
-                categories: params.categories
+                categories: params.categories,
+                user: params.user
                  }
     })))
+
+    
+  constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
+  }
 
   modifyQueryParameters({ name,
     supportedLanguages = "",
@@ -61,7 +67,8 @@ export class GameDataService {
     coming_soon = -1,
     genres = "",
     categories = "",
-    language = "english"
+    language = "english",
+    user = ""
   }:
   { name: string,
     supportedLanguages?: string,
@@ -70,7 +77,8 @@ export class GameDataService {
     coming_soon?: number,
     genres?: string,
     categories?: string,
-    language?: string
+    language?: string,
+    user?: string
   }){
     this.currentParams = {
       name,
@@ -80,7 +88,8 @@ export class GameDataService {
       coming_soon,
       genres,
       categories,
-      language
+      language,
+      user
     }
     this.parametersSubject.next(this.currentParams)
   }
@@ -93,9 +102,6 @@ export class GameDataService {
     this.currentIndex += this.batchSize
     this.parametersSubject.next(this.currentParams)
   }
-
-  constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
-   }
 
    resetBatchIndex(){
     this.currentIndex = 0
