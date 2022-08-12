@@ -13,8 +13,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { NgcCookieConsentModule, NgcCookieConsentConfig } from 'ngx-cookieconsent';
-import { HammerModule } from "@angular/platform-browser";
+import {
+  NgcCookieConsentModule,
+  NgcCookieConsentConfig,
+} from 'ngx-cookieconsent';
+import { HammerModule } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -59,25 +62,28 @@ import { SignInComponent } from './pages/login-page/components/sign-in/sign-in.c
 import { SignUpComponent } from './pages/login-page/components/sign-up/sign-up.component';
 import { VerifyEmailComponent } from './pages/login-page/components/verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './pages/login-page/components/forgot-password/forgot-password.component';
+import { WishlistService } from './services/wishlist.service';
+import { WishlistPageComponent } from './pages/wishlist-page/wishlist-page.component';
+import { ProfilePanelComponent } from './pages/wishlist-page/components/profile-panel/profile-panel.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
-const cookieConfig:NgcCookieConsentConfig = {
+const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
-    domain: 'game-finder-425ea.web.app' // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
+    domain: 'game-finder-425ea.web.app', // or 'your.domain.com' // it is mandatory to set a domain, for cookies to work properly (see https://goo.gl/S2Hy2A)
   },
   palette: {
     popup: {
-      background: '#e0e0e0'
+      background: '#e0e0e0',
     },
     button: {
-      background: '#fff'
-    }
+      background: '#fff',
+    },
   },
   theme: 'edgeless',
-  type: 'opt-out'
+  type: 'opt-out',
 };
 
 @NgModule({
@@ -104,7 +110,9 @@ const cookieConfig:NgcCookieConsentConfig = {
     SignInComponent,
     SignUpComponent,
     VerifyEmailComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    WishlistPageComponent,
+    ProfilePanelComponent,
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -127,16 +135,28 @@ const cookieConfig:NgcCookieConsentConfig = {
     LayoutModule,
     MatCheckboxModule,
     HammerModule,
-    TranslateModule.forRoot({loader: {
-      provide: TranslateLoader,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-    }
-  }),
-  NgcCookieConsentModule.forRoot(cookieConfig)
+        deps: [HttpClient],
+      },
+    }),
+    NgcCookieConsentModule.forRoot(cookieConfig),
   ],
-  providers: [GameDataService, NavigationDrawerService, FilterDrawerService, SearchService, DesktopModeService, ToolbarService, ThemeService, FilterService, LanguagePipe, CookieServiceWrapperService],
-  bootstrap: [AppComponent]
+  providers: [
+    GameDataService,
+    NavigationDrawerService,
+    FilterDrawerService,
+    SearchService,
+    DesktopModeService,
+    ToolbarService,
+    ThemeService,
+    FilterService,
+    LanguagePipe,
+    CookieServiceWrapperService,
+    WishlistService,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule {
- }
+export class AppModule {}
