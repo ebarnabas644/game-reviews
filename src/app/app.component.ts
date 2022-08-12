@@ -89,11 +89,9 @@ export class AppComponent implements OnInit, OnDestroy{
   checkDesktopMode(): void{
     if(window.innerWidth > this.desktopWidth){
       this.desktopModeService.setDesktopModeStatus(true)
-      console.log("Global desktop status set: true")
     }
     else{
       this.desktopModeService.setDesktopModeStatus(false)
-      console.log("Global desktop status set: false")
     }
   }
 
