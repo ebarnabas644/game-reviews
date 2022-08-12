@@ -1,8 +1,21 @@
 <mat-drawer-container class="container" [hasBackdrop]="!desktopMode">
-  <mat-drawer class="full-drawer" #drawer mode="side" position="start" (closed)="closeLanguageSelector()" [opened]="desktopMode">
+  <mat-drawer
+    class="full-drawer"
+    #drawer
+    mode="side"
+    position="start"
+    (closed)="closeLanguageSelector()"
+    [opened]="desktopMode"
+  >
     <div class="drawer">
-      <div class="drawer-destination" *ngIf="isGameView()" (click)="backButton()">
-        <mat-icon>keyboard_backspace</mat-icon>
+      <div *ngIf="isGameView()">
+        <div class="drawer-destination" (click)="backButton()">
+          <mat-icon>keyboard_backspace</mat-icon>
+        </div>
+        <div class="drawer-destination" (click)="onFavouriteClick()">
+          <mat-icon *ngIf="!favourite">star_border</mat-icon>
+          <mat-icon *ngIf="favourite">star</mat-icon>
+        </div>
       </div>
       <a routerLink="/">
         <div class="drawer-destination">
@@ -14,11 +27,46 @@
           <mat-icon>search</mat-icon>
         </div>
       </a>
+      <a routerLink="/wishlist">
+        <div
+          class="drawer-destination"
+          *ngIf="authService.userData; else loginButton"
+        >
+          <img
+            class="icon"
+            src="{{ authService.userData.photoURL }}"
+            (error)="imageErrorHandler($event)"
+            [ngClass]="imageError ? (darkMode ? 'inverted' : '') : ''"
+          />
+        </div>
+        <ng-template #loginButton>
+          <div class="drawer-destination profile-img">
+            <img
+              class="icon"
+              [ngClass]="darkMode ? 'inverted' : ''"
+              src="src=../../../assets/icons/login.png"
+            />
+          </div>
+        </ng-template>
+      </a>
       <div class="float-down">
         <div class="language-selector" (click)="toggleLanguageSelector()">
-          <span class="flag-icon" [ngClass]="'fi fi-'+selectedLanguageFlag"></span>
-          <span class="language-selector-content" [ngClass]="desktopMode ? '' : (languageSelectorVisibility ? 'opened' : '')">
-            <span *ngFor="let flag of flagList; let i = index" (click)="setLanguage(languageList[i])" class="language-option"><span class="flag-icon" [ngClass]="'fi fi-'+flag"></span></span>
+          <span
+            class="flag-icon"
+            [ngClass]="'fi fi-' + selectedLanguageFlag"
+          ></span>
+          <span
+            class="language-selector-content"
+            [ngClass]="
+              desktopMode ? '' : languageSelectorVisibility ? 'opened' : ''
+            "
+          >
+            <span
+              *ngFor="let flag of flagList; let i = index"
+              (click)="setLanguage(languageList[i])"
+              class="language-option"
+              ><span class="flag-icon" [ngClass]="'fi fi-' + flag"></span
+            ></span>
           </span>
         </div>
         <div class="drawer-destination" (click)="toogleDarkMode()">
@@ -26,9 +74,9 @@
           <mat-icon *ngIf="darkMode">brightness_2</mat-icon>
         </div>
       </div>
-  </div>
+    </div>
   </mat-drawer>
-    <mat-drawer-content class="content">
-        <ng-content></ng-content>
-    </mat-drawer-content>
+  <mat-drawer-content class="content">
+    <ng-content></ng-content>
+  </mat-drawer-content>
 </mat-drawer-container>

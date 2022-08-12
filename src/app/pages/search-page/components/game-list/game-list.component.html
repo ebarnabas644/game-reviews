@@ -1,5 +1,6 @@
 <div (window:resize)="onResize()" class="box">
     <cdk-virtual-scroll-viewport #scroller itemSize="{{rowHeight}}" class="cdk-viewport">
+        <ng-content></ng-content>
         <div *ngIf="isLoading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
             <ng-container>
                 <mat-list class="content">

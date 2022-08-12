@@ -25,7 +25,7 @@
     padding: 10px;
     margin: 5px;
     background-color: var(--background-color);
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
     border-radius: 5px;
     width: 90%;
 }
@@ -53,12 +53,12 @@
     border-style: none;
     font-size: 1.2rem;
     border-radius: 5px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
     width: 95%;
 }
 
 .form-button:hover{
-    filter: invert(5%);
+    filter: invert(30%);
 }
 
 .form-button img{

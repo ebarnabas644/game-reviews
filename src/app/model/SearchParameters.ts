@@ -6,5 +6,6 @@ export interface SearchParameters{
     coming_soon: number,
     genres: string,
     categories: string,
-    language: string
+    language: string,
+    user: string
 }

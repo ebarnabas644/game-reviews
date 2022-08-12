@@ -1,102 +1,119 @@
-.drawer-destination{
-    padding: 30px;
-    font-size: x-large;
-    color: var(--text-color);
+.drawer-destination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 86px;
+  height: 86px;
+  font-size: x-large;
+  color: var(--text-color);
 }
 
-a{
-    text-decoration: none !important;
+a {
+  text-decoration: none !important;
 }
 
 a:link {
-    text-decoration: none !important;
+  text-decoration: none !important;
 }
 
-a:hover{
-    text-decoration: none;
-    cursor: pointer;
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.full-drawer{
-    overflow: visible !important;
-    height: 100%;
-    background-color: var(--accent-color);
-    transition: background-color 0.5s ease;
+.full-drawer {
+  overflow: visible !important;
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: background-color 0.5s ease;
 }
 
-.container{
-    height: calc(100% - 64px);
+.container {
+  height: calc(100% - 64px);
 }
 
-mat-icon{
-    transform: scale(2);
+mat-icon {
+  transform: scale(2);
 }
 
 @media only screen and (max-width: 900px) {
-    .drawer-destination{
-        font-size: x-large;
-    }
+  .drawer-destination {
+    font-size: x-large;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .drawer-destination:hover{
-        filter: invert(50%);
-    }
-    .language-selector:hover .language-selector-content{
-        width: 100%;
-    }
+  .drawer-destination:hover {
+    filter: opacity(50%);
   }
-
-
-.drawer{
-    position: relative;
-    height: 100%;
+  .language-selector:hover .language-selector-content {
+    width: 100%;
+  }
 }
 
-.float-down{
-    position: absolute;
-    bottom: 0;
+.drawer {
+  position: relative;
+  height: 100%;
 }
 
-.content{
-    touch-action: pan-y !important;
-    height: 100%;
+.float-down {
+  position: absolute;
+  bottom: 0;
 }
 
-.language-selector{
-    //position: relative;
-    display: inline-block;
-    margin-left: 30px;
+.content {
+  touch-action: pan-y !important;
+  height: 100%;
 }
 
-.language-selector-content{
-    position: relative;
-    display: flex;
-    overflow: hidden;
-    background-color: var(--accent-color);
-    margin-top: -50px;
-    width: 0%;
-    left: 55px;
-    transition: width 0.5s ease;
+.language-selector {
+  //position: relative;
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.language-selector-content {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--accent-color);
+  margin-top: -50px;
+  width: 0%;
+  left: 55px;
+  transition: width 0.5s ease;
 }
 
 //https://github.com/angular/components/issues/13983
 ::ng-deep .mat-drawer-inner-container {
-    overflow: visible!important;
+  overflow: visible !important;
 }
 
-.language-option{
-    padding: 30px;
+.language-option {
+  padding: 30px;
 }
 
-.drawer-destination:hover.language-selector{
-    filter: invert(0%);
+.drawer-destination:hover.language-selector {
+  filter: invert(0%);
 }
 
-.opened{
-    width: 100%;
+.opened {
+  width: 100%;
 }
 
-.flag-icon{
-    transform: scale(2);
+.flag-icon {
+  transform: scale(2);
+}
+
+.icon {
+  width: 48px;
+  position: absolute;
+  border-radius: 30px;
+}
+
+.inverted {
+  filter: invert(100%);
+}
+
+.drawer-destination:hover.profile-img {
+  filter: invert(0%);
 }

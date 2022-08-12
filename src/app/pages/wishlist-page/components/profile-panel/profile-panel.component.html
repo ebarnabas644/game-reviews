@@ -1,0 +1,29 @@
+<div class="content">
+  <div class="card">
+    <div>
+      <img
+        class="logout-icon"
+        [ngClass]="darkMode ? 'inverted' : ''"
+        src="../../../assets/icons/login.png"
+        (click)="authService.SignOut()"
+      />
+    </div>
+    <div class="profile-picture">
+      <img
+        [ngClass]="imageError ? (darkMode ? 'inverted' : '') : ''"
+        [src]="authService.userData.photoURL"
+        (error)="imageErrorHandler($event)"
+      />
+    </div>
+    <div class="details">
+      <h2>{{ authService.userData.displayName }}</h2>
+      {{ ("wishlist.email" | translate) + authService.userData.email }}<br />
+      {{
+        ("wishlist.verified" | translate) +
+          (authService.userData.emailVerified
+            ? ("wishlist.verified-true" | translate)
+            : ("wishlist.verified-false" | translate))
+      }}
+    </div>
+  </div>
+</div>

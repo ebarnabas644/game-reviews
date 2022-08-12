@@ -7,7 +7,6 @@ import { AppOther } from '../model/AppOther';
 import { LanguagePipe } from '../tools/LanguagePipe';
 import { SearchParameters } from '../model/SearchParameters';
 
-const batchSize = 20;
 const defaultParams: SearchParameters = {
   name: "",
   supportedLanguages: "",
@@ -16,7 +15,8 @@ const defaultParams: SearchParameters = {
   coming_soon: -1,
   genres: "",
   categories: "",
-  language: "english"
+  language: "english",
+  user: ""
 }
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ const defaultParams: SearchParameters = {
 export class GameDataService {
   private apiBaseUrl = "https://main.game-reviews-api-server.net:8080"
   //private apiBaseUrl = " http://api.steampowered.com/ISteamApps"
+  private batchSize = 12
   private gameListPath = "/api/appList"
   private gameDetailPath = "/api/detailList"
   private gameGenreListPath = "/api/genreList/"
@@ -41,7 +42,7 @@ export class GameDataService {
   gameData$ = this.parameterChangeAction$.pipe(switchMap(params => 
     this.http.get<AppDetail[]>(this.gameDataPath+`/getBatch/${this.currentIndex}`, {
       params: { l: this.languagePipe.transform(params.language),
-                size: batchSize,
+                size: this.batchSize,
                 name: `${params.name}`,
                 supportedLanguages: `${params.supportedLanguages}`,
                 windows: params.osSelection[0] == -1 ? "" : params.osSelection[0],
@@ -50,9 +51,14 @@ export class GameDataService {
                 min_metacritic_score: params.min_metacritic_score == -1 ? "" : params.min_metacritic_score,
                 coming_soon: params.coming_soon == -1 ? "" : params.coming_soon,
                 genres: params.genres,
-                categories: params.categories
+                categories: params.categories,
+                user: params.user
                  }
     })))
+
+    
+  constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
+  }
 
   modifyQueryParameters({ name,
     supportedLanguages = "",
@@ -61,7 +67,8 @@ export class GameDataService {
     coming_soon = -1,
     genres = "",
     categories = "",
-    language = "english"
+    language = "english",
+    user = ""
   }:
   { name: string,
     supportedLanguages?: string,
@@ -70,7 +77,8 @@ export class GameDataService {
     coming_soon?: number,
     genres?: string,
     categories?: string,
-    language?: string
+    language?: string,
+    user?: string
   }){
     this.currentParams = {
       name,
@@ -80,18 +88,20 @@ export class GameDataService {
       coming_soon,
       genres,
       categories,
-      language
+      language,
+      user
     }
     this.parametersSubject.next(this.currentParams)
   }
 
-  getNextBatch(){
-    this.currentIndex += batchSize
-    this.parametersSubject.next(this.currentParams)
+  setBatchSize(newSize: number){
+    this.batchSize = newSize
   }
 
-  constructor(private http: HttpClient, private languagePipe: LanguagePipe) {
-   }
+  getNextBatch(){
+    this.currentIndex += this.batchSize
+    this.parametersSubject.next(this.currentParams)
+  }
 
    resetBatchIndex(){
     this.currentIndex = 0

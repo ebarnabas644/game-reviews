@@ -1,30 +1,37 @@
 {
-    "filter":{
-        "options": "Filter options",
-        "genres": "Genres",
-        "categories": "Categories"
-    },
-    "detail":{
-        "developers": "Developers",
-        "publishers": "Publishers",
-        "reviews": "Reviews",
-        "system-requirements": "System requirements"
-    },
-    "toolbar":{
-        "trending": "New & Trending games",
-        "search": "Search",
-        "sign-in": "Login",
-        "sign-up": "Register",
-        "verify-email": "Verify email",
-        "forgot-password": "Forgot password"
-    },
-    "cookie": {
-        "header": "Cookies used on the website!",
-        "message": "This website uses cookies to ensure you get the best experience on our website.",
-        "dismiss": "Got it!",
-        "allow": "Allow cookies",
-        "deny": "Decline",
-        "link": "Learn more",
-        "policy": "Cookie Policy"
-    }
+  "filter": {
+    "options": "Filter options",
+    "genres": "Genres",
+    "categories": "Categories"
+  },
+  "detail": {
+    "developers": "Developers",
+    "publishers": "Publishers",
+    "reviews": "Reviews",
+    "system-requirements": "System requirements"
+  },
+  "toolbar": {
+    "trending": "New & Trending games",
+    "search": "Search",
+    "sign-in": "Login",
+    "sign-up": "Register",
+    "verify-email": "Verify email",
+    "forgot-password": "Forgot password",
+    "wishlist": "Wishlist"
+  },
+  "cookie": {
+    "header": "Cookies used on the website!",
+    "message": "This website uses cookies to ensure you get the best experience on our website.",
+    "dismiss": "Got it!",
+    "allow": "Allow cookies",
+    "deny": "Decline",
+    "link": "Learn more",
+    "policy": "Cookie Policy"
+  },
+  "wishlist": {
+    "email": "Email: ",
+    "verified": "Verified: ",
+    "verified-true": "Yes",
+    "verified-false": "No"
+  }
 }

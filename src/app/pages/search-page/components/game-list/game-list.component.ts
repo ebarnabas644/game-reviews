@@ -1,252 +1,324 @@
-import { Component, NgZone, OnInit, ElementRef, AfterViewChecked, ChangeDetectorRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  NgZone,
+  OnInit,
+  ElementRef,
+  ChangeDetectorRef,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  Input,
+} from '@angular/core';
 import { AppDetail } from 'src/app/model/AppDetail';
-import { GameDataService } from '../../../../services/game-data.service'
-import { ViewChild } from '@angular/core'
+import { GameDataService } from '../../../../services/game-data.service';
+import { ViewChild } from '@angular/core';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { map, pairwise, filter, throttleTime, debounceTime, distinctUntilChanged, takeUntil, Subscription } from 'rxjs';
-import { AppBase } from 'src/app/model/AppBase';
+import { map, pairwise, filter, throttleTime } from 'rxjs';
 import { SearchService } from 'src/app/services/search.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { AppOther } from 'src/app/model/AppOther';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { TitleStrategy } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @UntilDestroy()
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
   styleUrls: ['./game-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameListComponent implements OnInit, OnDestroy {
-  gameListCache: AppDetail[] = []
-  newData: AppDetail[] = []
-  private scrollerElement!: CdkVirtualScrollViewport
-  @ViewChild('scroller') set scroller(scroller: CdkVirtualScrollViewport){
-      this.scrollerElement = scroller
-  };
-  @ViewChild('row') testHeight!: ElementRef
-  rowHeight: number = 315
-  cardPerRow: number = 1
-  cardSize: number = 240
-  counter: number = 0
+  gameListCache: AppDetail[] = [];
+  newData: AppDetail[] = [];
+  private scrollerElement!: CdkVirtualScrollViewport;
+  @ViewChild('scroller') set scroller(scroller: CdkVirtualScrollViewport) {
+    this.scrollerElement = scroller;
+  }
+  @ViewChild('row') testHeight!: ElementRef;
+  rowHeight: number = 315;
+  cardPerRow: number = 1;
+  cardSize: number = 240;
+  counter: number = 0;
   gridList: AppDetail[][] = [];
-  currentSearchName: string = ""
-  private timeout: number = 500
-  private interval!: number
-  private firstStartUp: boolean = true
-  genresFilter: string = ""
-  categoryFilter: string = ""
-  osSelection: number[] = [-1,-1,-1]
-  currentLanguage!: string
-  isLoading = false
-  lastBatch = false
+  currentSearchName: string = '';
+  private timeout: number = 500;
+  private interval!: number;
+  private firstStartUp: boolean = true;
+  genresFilter: string = '';
+  categoryFilter: string = '';
+  osSelection: number[] = [-1, -1, -1];
+  currentLanguage!: string;
+  isLoading = false;
+  lastBatch = false;
+  @Input() wishlistMode: boolean = false;
 
-  constructor(private gameDataService: GameDataService, private ngZone: NgZone, private searchService: SearchService, private filterService: FilterService, private ref: ChangeDetectorRef, private translate: TranslateService) { }
+  constructor(
+    private gameDataService: GameDataService,
+    private ngZone: NgZone,
+    private searchService: SearchService,
+    private filterService: FilterService,
+    private ref: ChangeDetectorRef,
+    private translate: TranslateService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.currentLanguage = this.translate.currentLang
-    
+    this.currentLanguage = this.translate.currentLang;
+
     //this.gameDataService.resetBatchIndex()
-    this.onLanguageChangeSubscribe()
-    this.searchSubscription()
-    this.genreFilterSubscription()
-    this.categoryFilterSubscription()
-    this.osSelectionSubscription()
-    this.LoadingSubscription()
-    
+    this.onLanguageChangeSubscribe();
+    this.searchSubscription();
+    this.genreFilterSubscription();
+    this.categoryFilterSubscription();
+    this.osSelectionSubscription();
+    this.LoadingSubscription();
+
     //this.gameDataService.resetSearch()
-    this.fetchSubscribe()
-    this.onResize()
+    this.gameDataService.setBatchSize(5 * this.cardPerRow);
+    this.onResize();
+    this.fetchSubscribe();
 
     //this.setSearchParameters()
   }
 
-  
-  searchWithDelay(): void{
-    window.clearTimeout(this.timeout)
-    if(this.firstStartUp){
-      this.interval = 0
-      this.firstStartUp = false
+  searchWithDelay(): void {
+    window.clearTimeout(this.timeout);
+    if (this.firstStartUp) {
+      this.interval = 0;
+      this.firstStartUp = false;
+    } else {
+      this.interval = 500;
     }
-    else{
-      this.interval = 500
-    }
-    this.timeout = window.setTimeout(() => this.setSearchParameters(), this.interval)
+    this.timeout = window.setTimeout(
+      () => this.setSearchParameters(),
+      this.interval
+    );
   }
 
-  onLanguageChangeSubscribe(){
-    this.translate.onLangChange.pipe(untilDestroyed(this)).subscribe((event: LangChangeEvent) =>{
-      this.currentLanguage = event.lang
-    })
+  onLanguageChangeSubscribe() {
+    this.translate.onLangChange
+      .pipe(untilDestroyed(this))
+      .subscribe((event: LangChangeEvent) => {
+        this.currentLanguage = event.lang;
+      });
   }
 
-  fetchSubscribe(): void{
-    this.gameDataService.gameData$.pipe(untilDestroyed(this)).subscribe(
-      data => {
-          this.searchService.updateIsLoading(true)
-          this.ref.markForCheck()
-          if(data.length != 0){
-            this.gameListCache = data
-            console.log(this.gameListCache)
-            this.splitDataIntoGrid()
-            this.isLoading = false
-          }
-          else{
-            this.lastBatch = true
-            console.log("last reached")
-          }
-          this.searchService.updateIsLoading(false)
-          this.ref.markForCheck()
+  fetchSubscribe(): void {
+    this.gameDataService.gameData$
+      .pipe(untilDestroyed(this))
+      .subscribe((data) => {
+        this.searchService.updateIsLoading(true);
+        this.ref.markForCheck();
+        if (data.length != 0) {
+          this.gameListCache = data;
+          console.log(this.gameListCache);
+          this.splitDataIntoGrid();
+          this.isLoading = false;
+        } else {
+          this.lastBatch = true;
+          console.log('last reached');
+        }
+        this.searchService.updateIsLoading(false);
+        this.ref.markForCheck();
+      });
+  }
+
+  setSearchParameters() {
+    this.resetGrid();
+    this.searchService.updateIsLoading(true);
+    this.ref.markForCheck();
+    if (this.wishlistMode) {
+      this.gameDataService.modifyQueryParameters({
+        name: this.currentSearchName,
+        genres: this.genresFilter,
+        categories: this.categoryFilter,
+        osSelection: this.osSelection,
+        language: this.currentLanguage,
+        user: this.authService.userData.uid,
+      });
+    } else {
+      this.gameDataService.modifyQueryParameters({
+        name: this.currentSearchName,
+        genres: this.genresFilter,
+        categories: this.categoryFilter,
+        osSelection: this.osSelection,
+        language: this.currentLanguage,
+      });
+    }
+  }
+
+  splitDataIntoGrid(): void {
+    let row: AppDetail[] = [];
+    if (this.gridList.length > 0) {
+      if (this.gridList[this.gridList.length - 1].length < this.cardPerRow) {
+        row = this.gridList.pop()!;
       }
-    )
-  }
-
-  setSearchParameters(){
-    this.resetGrid()
-    this.searchService.updateIsLoading(true)
-    this.ref.markForCheck()
-    this.gameDataService.modifyQueryParameters({ name: this.currentSearchName, genres: this.genresFilter, categories: this.categoryFilter, osSelection: this.osSelection, language: this.currentLanguage })
-  }
-
-  splitDataIntoGrid(): void{
-    let row: AppDetail[] = []
-    if(this.gridList.length > 0){
-      if(this.gridList[this.gridList.length - 1].length < this.cardPerRow){
-        row = this.gridList.pop()!
-      }
     }
-    var temp: AppDetail[][] = []
-    this.gameListCache.forEach(item => {
-      row.push(this.removeInvalidCharacters(item))
-      if(row.length == this.cardPerRow){
-        temp.push(row)
-        row = []
+    var temp: AppDetail[][] = [];
+    this.gameListCache.forEach((item) => {
+      row.push(this.removeInvalidCharacters(item));
+      if (row.length == this.cardPerRow) {
+        temp.push(row);
+        row = [];
       }
-    })
-    if(row.length != 0){
-      temp.push(row)
+    });
+    if (row.length != 0) {
+      temp.push(row);
     }
-    this.gridList = [...this.gridList, ...temp]
+    this.gridList = [...this.gridList, ...temp];
   }
 
-  private searchSubscription(){
-    this.searchService.getAppName().pipe(untilDestroyed(this)).subscribe(name => {
-      this.currentSearchName = name
-      this.resetScroller()
-      this.searchWithDelay()
-    })
+  private searchSubscription() {
+    this.searchService
+      .getAppName()
+      .pipe(untilDestroyed(this))
+      .subscribe((name) => {
+        this.currentSearchName = name;
+        this.resetScroller();
+        this.searchWithDelay();
+      });
   }
 
   private genreFilterSubscription() {
-    this.filterService.getGenres().pipe(untilDestroyed(this)).subscribe(genres => {
-      this.genresFilter = this.convertArrayToString(genres)
-      this.resetScroller();
-      this.searchWithDelay()
-    });
+    this.filterService
+      .getGenres()
+      .pipe(untilDestroyed(this))
+      .subscribe((genres) => {
+        this.genresFilter = this.convertArrayToString(genres);
+        this.resetScroller();
+        this.searchWithDelay();
+      });
   }
 
   private categoryFilterSubscription() {
-    this.filterService.getCategories().pipe(untilDestroyed(this)).subscribe(categories => {
-      this.categoryFilter = this.convertArrayToString(categories)
-      this.resetScroller();
-      this.searchWithDelay()
-    });
+    this.filterService
+      .getCategories()
+      .pipe(untilDestroyed(this))
+      .subscribe((categories) => {
+        this.categoryFilter = this.convertArrayToString(categories);
+        this.resetScroller();
+        this.searchWithDelay();
+      });
   }
 
-  private osSelectionSubscription(){
-    this.filterService.getOsSelection().pipe(untilDestroyed(this)).subscribe(selection =>{
-      this.osSelection = selection
-      this.resetScroller();
-      this.searchWithDelay()
-    })
+  private osSelectionSubscription() {
+    this.filterService
+      .getOsSelection()
+      .pipe(untilDestroyed(this))
+      .subscribe((selection) => {
+        this.osSelection = selection;
+        this.resetScroller();
+        this.searchWithDelay();
+      });
   }
 
-  private LoadingSubscription(){
-    this.searchService.getIsLoading().pipe(untilDestroyed(this)).subscribe(value => {
-      this.isLoading = value
-    })
+  private LoadingSubscription() {
+    this.searchService
+      .getIsLoading()
+      .pipe(untilDestroyed(this))
+      .subscribe((value) => {
+        this.isLoading = value;
+      });
   }
 
-  private convertArrayToString(array: AppOther[]): string{
-    var converted: string = ""
-    array.forEach(item => converted += item.value + ",");
-      converted = converted.substring(0, converted.length - 1);
-    return converted
+  private convertArrayToString(array: AppOther[]): string {
+    var converted: string = '';
+    array.forEach((item) => (converted += item.value + ','));
+    converted = converted.substring(0, converted.length - 1);
+    return converted;
   }
 
-  ngAfterViewInit(): void{
-    this.setupScroller()
+  ngAfterViewInit(): void {
+    this.setupScroller();
   }
 
-  resetGrid(){
-    this.resetScroller()
-    this.lastBatch = false
-    this.gridList = []
-    this.gameListCache = []
-    this.gameDataService.resetSearch()
+  resetGrid() {
+    this.resetScroller();
+    this.lastBatch = false;
+    this.gridList = [];
+    this.gameListCache = [];
+    this.gameDataService.resetSearch();
   }
 
-  resetSearch(){
-    this.resetScroller()
-    this.currentSearchName = ""
-    this.lastBatch = false
-    this.gridList = []
-    this.gameListCache = []
-    this.gameDataService.resetSearch()
+  resetSearch() {
+    this.resetScroller();
+    this.currentSearchName = '';
+    this.lastBatch = false;
+    this.gridList = [];
+    this.gameListCache = [];
+    this.gameDataService.resetSearch();
     //this.gameDataService.getNextBatch()
   }
 
-  resetScroller(){
-    if(this.scrollerElement != undefined){
+  resetScroller() {
+    if (this.scrollerElement != undefined) {
       this.scrollerElement.scrollToIndex(0);
     }
   }
 
-  rerenderGrid(){
-    this.gameListCache = []
-    this.gridList.forEach(row => row.forEach(item => this.gameListCache.push(item)))
-    this.gridList = []
-    console.log(this.gameListCache)
-    this.splitDataIntoGrid()
+  rerenderGrid() {
+    this.gameListCache = [];
+    this.gridList.forEach((row) =>
+      row.forEach((item) => this.gameListCache.push(item))
+    );
+    this.gridList = [];
+    console.log(this.gameListCache);
+    this.splitDataIntoGrid();
   }
 
   onResize() {
-    var temp = this.cardPerRow
-    this.cardPerRow = Math.max(Math.floor((window.innerWidth / 2) / this.cardSize), 1)
-    console.log(this.cardPerRow)
-    if(temp != this.cardPerRow){
-      this.rerenderGrid()
-      this.ref.detectChanges()
+    var temp = this.cardPerRow;
+    this.cardPerRow = Math.max(
+      Math.floor(window.innerWidth / 2 / this.cardSize),
+      1
+    );
+    console.log(this.cardPerRow);
+    if (temp != this.cardPerRow) {
+      this.gameDataService.setBatchSize(5 * this.cardPerRow);
+      this.rerenderGrid();
+      this.ref.detectChanges();
+      if (!this.scrollbarVisible(this.scrollerElement) && !this.lastBatch) {
+        this.gameDataService.getNextBatch();
+      }
     }
   }
 
-  setupScroller(): void{
-    this.scrollerElement.elementScrolled().pipe(
-      map(() => this.scrollerElement.measureScrollOffset('bottom')),
-      pairwise(),
-      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-      throttleTime(500)
-    ).pipe(untilDestroyed(this)).subscribe(() => {
-      this.ngZone.run(() => {
-        if(!this.lastBatch){
-          this.gameDataService.getNextBatch()
-          console.log("scroll")
-        }
+  setupScroller(): void {
+    this.scrollerElement
+      .elementScrolled()
+      .pipe(
+        map(() => this.scrollerElement.measureScrollOffset('bottom')),
+        pairwise(),
+        filter(([y1, y2]) => y2 < y1 && y2 < 140),
+        throttleTime(500)
+      )
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          if (!this.lastBatch) {
+            this.gameDataService.getNextBatch();
+            console.log('scroll');
+          }
+        });
       });
-    })
   }
 
-  removeInvalidCharacters(data: AppDetail): AppDetail{
-    let filteredName = data.name.replace(/\?/g,'')
-    data.name = filteredName
-    return data
+  scrollbarVisible(element: CdkVirtualScrollViewport) {
+    return (
+      element.elementRef.nativeElement.scrollHeight >
+      element.elementRef.nativeElement.clientHeight
+    );
   }
 
-  ngOnDestroy(): void { }
+  removeInvalidCharacters(data: AppDetail): AppDetail {
+    let filteredName = data.name.replace(/\?/g, '');
+    data.name = filteredName;
+    return data;
+  }
+
+  ngOnDestroy(): void {}
 
   trackByFn(index: number, item: AppDetail[]) {
-    return item
+    return item;
   }
 }

@@ -1,0 +1,48 @@
+.content {
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: auto;
+  margin-top: 10px;
+  width: 40%;
+  max-width: 500px;
+  min-width: 300px;
+  border-radius: 5px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  background-color: var(--card-color);
+}
+
+.profile-picture {
+  padding: 10px;
+}
+
+.profile-picture img {
+  border-radius: 5px;
+  height: 80px;
+}
+
+.details {
+  padding: 10px;
+}
+
+.inverted {
+  filter: invert(100%);
+}
+
+.logout-icon {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logout-icon:hover {
+    filter: invert(50%);
+  }
+}

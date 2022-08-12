@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Subscription } from 'rxjs';
 import { FilterService } from 'src/app/services/filter.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-operating-system-selector',
   templateUrl: './operating-system-selector.component.html',
@@ -12,12 +14,10 @@ export class OperatingSystemSelectorComponent implements OnInit, OnDestroy {
   osArray: boolean[] = []
   @Input() darkMode!: boolean
 
-  osSelectedSub!: Subscription
-
   constructor(private filterService: FilterService) { }
 
   ngOnInit(): void {
-    this.osSelectedSub = this.filterService.getOsSelection().subscribe(selected => {
+    this.filterService.getOsSelection().pipe(untilDestroyed(this)).subscribe(selected => {
       this.osArray = []
       selected.forEach(item => this.osArray.push(item == 1 ? true : false))
     })
@@ -40,7 +40,6 @@ export class OperatingSystemSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    
   }
 
 }

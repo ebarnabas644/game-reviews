@@ -67,6 +67,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     return this.router.url.match('^/forgot-password$');
   }
 
+  isWishlistView(){
+    return this.router.url.match('^/wishlist$');
+  }
+
   ngOnDestroy(): void {
   }
 
