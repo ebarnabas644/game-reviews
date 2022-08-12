@@ -7,6 +7,8 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+
+//https://www.positronx.io/full-angular-firebase-authentication-system/
 @Injectable({
   providedIn: 'root',
 })
@@ -20,6 +22,8 @@ export class AuthService {
   ) {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
+    const user = JSON.parse(localStorage.getItem('user')!);
+    this.userData = user;
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userData = user;
@@ -28,6 +32,7 @@ export class AuthService {
       } else {
         localStorage.setItem('user', 'null');
         JSON.parse(localStorage.getItem('user')!);
+        this.userData = null;
       }
     });
   }
@@ -97,7 +102,7 @@ export class AuthService {
       .signInWithPopup(provider)
       .then((result) => {
         this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['/search']);
         });
         this.SetUserData(result.user);
       })
@@ -127,7 +132,8 @@ export class AuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['sign-in']);
+      this.userData = null;
+      this.router.navigate(['search']);
     });
   }
 }
