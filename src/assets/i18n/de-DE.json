@@ -8,30 +8,48 @@
     "developers": "Entwickler",
     "publishers": "Publisher",
     "reviews": "Rezensiomen",
-    "system-requirements": "Systemanforderungen"
+    "system-requirements": "Systemanforderungen",
+    "release-date": "Veröffentlichung"
   },
   "toolbar": {
     "trending": "Neu & Angesagt",
     "search": "Suchen",
-    "sign-in": "Login",
-    "sign-up": "Register",
-    "verify-email": "Verify email",
-    "forgot-password": "Forgot password",
-    "wishlist": "Wishlist"
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "verify-email": "E-Mail bestätigen",
+    "forgot-password": "Passwort vergessen",
+    "wishlist": "Wunschliste"
   },
   "cookie": {
     "header": "Cookies used on the website!",
-    "message": "This website uses cookies to ensure you get the best experience on our website.",
-    "dismiss": "Got it!",
-    "allow": "Allow cookies",
-    "deny": "Decline",
-    "link": "Learn more",
-    "policy": "Cookie Policy"
+    "message": "Diese Website verwendet Cookies, um sicherzustellen, dass Sie die beste Erfahrung auf unserer Website erhalten.",
+    "dismiss": "Ich habs!",
+    "allow": "Zustimmen",
+    "deny": "Ablehnen",
+    "link": "Mehr erfahren",
+    "policy": "Datenschutzbestimmungen"
   },
   "wishlist": {
     "email": "Email: ",
-    "verified": "Verified: ",
-    "verified-true": "Yes",
-    "verified-false": "No"
+    "verified": "Verifiziert: ",
+    "verified-true": "Ja",
+    "verified-false": "Nein"
+  },
+  "user": {
+    "sign-in": "Anmelden",
+    "sign-up": "Registrieren",
+    "verify-email": "E-Mail bestätigen",
+    "forgot-password": "Passwort vergessen",
+    "forgot-password-question": "Passwort vergessen?",
+    "or": "Oder",
+    "email": "Email",
+    "password": "Passwort",
+    "password-again": "Bestätigen",
+    "password-not-match": "Diese Passwörter stimmen nicht überein. Versuchen Sie es noch einmal.",
+    "reset-password": "Passwort zurücksetzen",
+    "send-confirm": "Wir haben eine Bestätigungs-E-Mail an gesendet",
+    "check-email": "Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Link, um Ihre E-Mail-Adresse zu bestätigen.",
+    "resend-email": "Bestätigungsmail erneut senden",
+    "back": "Zurück"
   }
 }

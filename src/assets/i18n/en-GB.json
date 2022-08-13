@@ -8,13 +8,14 @@
     "developers": "Developers",
     "publishers": "Publishers",
     "reviews": "Reviews",
-    "system-requirements": "System requirements"
+    "system-requirements": "System requirements",
+    "release-date": "Release date"
   },
   "toolbar": {
     "trending": "New & Trending games",
     "search": "Search",
-    "sign-in": "Login",
-    "sign-up": "Register",
+    "login": "Login",
+    "register": "Register",
     "verify-email": "Verify email",
     "forgot-password": "Forgot password",
     "wishlist": "Wishlist"
@@ -33,5 +34,22 @@
     "verified": "Verified: ",
     "verified-true": "Yes",
     "verified-false": "No"
+  },
+  "user": {
+    "sign-in": "Sign in",
+    "sign-up": "Sign up",
+    "verify-email": "Verify email",
+    "forgot-password": "Forgot password",
+    "forgot-password-question": "Forgot password?",
+    "or": "Or",
+    "email": "Email",
+    "password": "Password",
+    "password-again": "Password again",
+    "password-not-match": "Passwords not match.",
+    "reset-password": "Reset password",
+    "send-confirm": "We have sent a confirmation email to",
+    "check-email": "Please check your email and click on the link to verfiy your email address.",
+    "resend-email": "Resend Verification Email",
+    "back": "Back"
   }
 }
