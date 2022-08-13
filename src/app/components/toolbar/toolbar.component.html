@@ -1,65 +1,125 @@
 <mat-toolbar>
-    <mat-toolbar-row *ngIf="isHomeView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span>{{'toolbar.trending' | translate}}</span>
-    </mat-toolbar-row>
+  <mat-toolbar-row *ngIf="isHomeView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span>{{ "toolbar.trending" | translate }}</span>
+  </mat-toolbar-row>
 
-    <mat-toolbar-row *ngIf="isSearchView()">
-        <div class="content">
-            <div class="center">
-                <div class="center">
-                    <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-                    <span>{{'toolbar.search' | translate}}</span>
-                </div>
-                <div class="center search">
-                    <app-search-bar></app-search-bar>
-                </div>
-                <div class="center">
-                    <mat-icon class="filter-button" aria-hidden="false" (click)="toggleFilterDrawer()" *ngIf="!desktopMode">filter_list</mat-icon>
-                </div>
-            </div>
+  <mat-toolbar-row *ngIf="isSearchView()">
+    <div class="content">
+      <div class="center">
+        <div class="center">
+          <mat-icon
+            class="nav-icon"
+            aria-hidden="false"
+            (click)="toggleNavigationDrawer()"
+            *ngIf="!desktopMode"
+            >menu</mat-icon
+          >
+          <span>{{ "toolbar.search" | translate }}</span>
         </div>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isGameView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span class="title">{{title}}</span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isSignInView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span class="title">{{'toolbar.sign-in' | translate}}</span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isSignUpView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span class="title">{{'toolbar.sign-up' | translate}}</span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isVerifyEmailView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span class="title">{{'toolbar.verify-email' | translate}}</span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isForgotPasswordView()">
-        <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-        <span class="title">{{'toolbar.forgot-password' | translate}}</span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="isWishlistView()">
-        <div class="content">
-            <div class="center">
-                <div class="center">
-                    <mat-icon class="nav-icon" aria-hidden="false" (click)="toggleNavigationDrawer()" *ngIf="!desktopMode">menu</mat-icon>
-                    <span>{{'toolbar.wishlist' | translate}}</span>
-                </div>
-                <div class="center search">
-                    <app-search-bar></app-search-bar>
-                </div>
-                <div class="center">
-                    <mat-icon class="filter-button" aria-hidden="false" (click)="toggleFilterDrawer()" *ngIf="!desktopMode">filter_list</mat-icon>
-                </div>
-            </div>
+        <div class="center search">
+          <app-search-bar></app-search-bar>
         </div>
-    </mat-toolbar-row>
+        <div class="center">
+          <mat-icon
+            class="filter-button"
+            aria-hidden="false"
+            (click)="toggleFilterDrawer()"
+            *ngIf="!desktopMode"
+            >filter_list</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isGameView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span class="title">{{ title }}</span>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isSignInView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span class="title">{{ "toolbar.login" | translate }}</span>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isSignUpView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span class="title">{{ "toolbar.register" | translate }}</span>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isVerifyEmailView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span class="title">{{ "toolbar.verify-email" | translate }}</span>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isForgotPasswordView()">
+    <mat-icon
+      class="nav-icon"
+      aria-hidden="false"
+      (click)="toggleNavigationDrawer()"
+      *ngIf="!desktopMode"
+      >menu</mat-icon
+    >
+    <span class="title">{{ "toolbar.forgot-password" | translate }}</span>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row *ngIf="isWishlistView()">
+    <div class="content">
+      <div class="center">
+        <div class="center">
+          <mat-icon
+            class="nav-icon"
+            aria-hidden="false"
+            (click)="toggleNavigationDrawer()"
+            *ngIf="!desktopMode"
+            >menu</mat-icon
+          >
+          <span>{{ "toolbar.wishlist" | translate }}</span>
+        </div>
+        <div class="center search">
+          <app-search-bar></app-search-bar>
+        </div>
+        <div class="center">
+          <mat-icon
+            class="filter-button"
+            aria-hidden="false"
+            (click)="toggleFilterDrawer()"
+            *ngIf="!desktopMode"
+            >filter_list</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>
