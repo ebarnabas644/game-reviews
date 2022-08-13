@@ -1,66 +1,81 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 @include mat-core();
 
 $dark-palette: (
-    50: #1d1d1d,
-    100: #534bae,
-    200: #b4c9e4,
-    300: #7fa3d1,
-    400: #42a5f5,
-    500: #1a237e,
-    600: #4072b4,
-    700: #1d1d1d,
-    800: #305687,
-    900: #1b1b1b,
-    A100: #ffffff,
-    A200: #dde6f3,
-    A400: #6992c9,
-    A700: #38649d,
-    contrast: (
-        50: $black-87-opacity,
-        100: $black-87-opacity,
-        200: $black-87-opacity,
-        300: $black-87-opacity,
-        400: $black-87-opacity,
-        500: white,
-        600: white,
-        700: white,
-        800: white,
-        900: white,
-        A100: $black-87-opacity,
-        A200: $black-87-opacity,
-        A400: $black-87-opacity,
-        A700: white,
-    )
+  50: #1d1d1d,
+  100: #534bae,
+  200: #b4c9e4,
+  300: #7fa3d1,
+  400: #42a5f5,
+  500: #1a237e,
+  600: #2b2b2b,
+  700: #1d1d1d,
+  800: #305687,
+  900: #1b1b1b,
+  A100: #ffffff,
+  A200: #dde6f3,
+  A400: #6992c9,
+  A700: #38649d,
+  contrast: (
+    50: $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: $black-87-opacity,
+    A200: $black-87-opacity,
+    A400: $black-87-opacity,
+    A700: white,
+  ),
 );
 
-@function my-palette($base-palette, $default: 500, $lighter: 100, $darker: 700, $extra-light: 50, $extra-dark: 900, $text: $default) {
-    $new-palette: mat-palette($base-palette, $default, $lighter, $darker, $text: $default);
-  
-    $extra-palette: (
-      extra-light: map-get($base-palette, $extra-light),
-      extra-dark: map-get($base-palette, $extra-dark),
-      extra-light-contrast: mat-contrast($base-palette, $extra-light),
-      extra-dark-contrast: mat-contrast($base-palette, $extra-dark),
-    );
-  
-    @return map_merge($new-palette, $extra-palette);
-  }
+@function my-palette(
+  $base-palette,
+  $default: 500,
+  $lighter: 100,
+  $darker: 700,
+  $extra-light: 50,
+  $extra-dark: 900,
+  $text: $default
+) {
+  $new-palette: mat-palette(
+    $base-palette,
+    $default,
+    $lighter,
+    $darker,
+    $text: $default
+  );
 
-  $dark-theme-primary: my-palette(
-    $base-palette: $dark-palette, 
-    $lighter: 100, 
-    $darker: 700, 
-    $extra-light: 50, 
-    $extra-dark: 900); 
+  $extra-palette: (
+    extra-light: map-get($base-palette, $extra-light),
+    extra-dark: map-get($base-palette, $extra-dark),
+    extra-light-contrast: mat-contrast($base-palette, $extra-light),
+    extra-dark-contrast: mat-contrast($base-palette, $extra-dark),
+  );
+
+  @return map_merge($new-palette, $extra-palette);
+}
+
+$dark-theme-primary: my-palette(
+  $base-palette: $dark-palette,
+  $lighter: 600,
+  $darker: 700,
+  $extra-light: 50,
+  $extra-dark: 900,
+);
 
 $dark-theme-accent: mat-palette($dark-palette, 700);
 $dark-theme-warn: mat-palette($mat-light-blue, 100);
 
 $dark-theme: mat-dark-theme(
-    $dark-theme-primary,
-    $dark-theme-accent,
-    $dark-theme-warn
+  $dark-theme-primary,
+  $dark-theme-accent,
+  $dark-theme-warn
 );
 
 @include angular-material-theme($dark-theme);

@@ -10,6 +10,7 @@
   $primary: mat-color(map-get($theme, primary), extra-dark);
   $accent: mat-color(map-get($theme, accent));
   $warn: mat-color(map-get($theme, warn));
+  $scrollbar-handler: mat-color(map-get($theme, primary), lighter);
 
   $base: mat-color($foreground-palette, base);
   $divider: mat-color($foreground-palette, divider);
@@ -24,7 +25,7 @@
   $text: mat-color($foreground-palette, text);
   $slider-off: mat-color($foreground-palette, slider-off);
   $slider-off-active: mat-color($foreground-palette, slider-off-active);
-  
+
   $status-bar: mat-color($background-palette, status-bar);
   $app-bar: mat-color($background-palette, app-bar);
   $background: mat-color($background-palette, background);
@@ -35,17 +36,23 @@
   $raised-button: mat-color($background-palette, raised-button);
   $focused-button: mat-color($background-palette, focused-button);
   $selected-button: mat-color($background-palette, selected-button);
-  $selected-disabled-button: mat-color($background-palette, selected-disabled-button);
-  $disabled-button-toggle: mat-color($background-palette, disabled-button-toggle);
+  $selected-disabled-button: mat-color(
+    $background-palette,
+    selected-disabled-button
+  );
+  $disabled-button-toggle: mat-color(
+    $background-palette,
+    disabled-button-toggle
+  );
 
   /////////////////////////////////////////////////
   // CSS VARS
   /////////////////////////////////////////////////
 
-
   --primary-color: #{$primary};
   --accent-color: #{$accent};
   --warn-color: #{$warn};
+  --scrollbar-handler: #{$scrollbar-handler};
 
   --base-color: #{$base};
   --divider-color: #{$divider};
