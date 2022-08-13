@@ -11,19 +11,47 @@ import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { WishlistPageComponent } from './pages/wishlist-page/wishlist-page.component';
 
 const routes: Routes = [
-  { path: '', component: MainPageComponent },
-  { path: 'search', component: SearchPageComponent },
+  {
+    path: '',
+    component: MainPageComponent,
+    data: { title: 'toolbar.trending' },
+  },
+  {
+    path: 'search',
+    component: SearchPageComponent,
+    data: { title: 'toolbar.search' },
+  },
   { path: 'search/:id', component: DetailPageComponent },
-  { path: 'sign-in', component: SignInComponent },
-  { path: 'register-user', component: SignUpComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'verify-email-address', component: VerifyEmailComponent },
-  { path: 'wishlist', component: WishlistPageComponent, canActivate: [AuthGuard] }
+  {
+    path: 'sign-in',
+    component: SignInComponent,
+    data: { title: 'toolbar.login' },
+  },
+  {
+    path: 'register-user',
+    component: SignUpComponent,
+    data: { title: 'toolbar.register' },
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    data: { title: 'toolbar.forgot-password' },
+  },
+  {
+    path: 'verify-email-address',
+    component: VerifyEmailComponent,
+    data: { title: 'toolbar.verify-email' },
+  },
+  {
+    path: 'wishlist',
+    component: WishlistPageComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'toolbar.wishlist' },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
- }
+export class AppRoutingModule {}

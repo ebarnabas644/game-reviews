@@ -1,73 +1,124 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { DesktopModeService } from './services/desktop-mode.service';
 import { ThemeService } from './services/theme.service';
-import { NgcCookieConsentService, NgcStatusChangeEvent } from 'ngx-cookieconsent';
+import {
+  NgcCookieConsentService,
+  NgcStatusChangeEvent,
+} from 'ngx-cookieconsent';
 import { TranslateService } from '@ngx-translate/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { CookieServiceWrapperService } from './services/cookie-service-wrapper.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @UntilDestroy()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy{
+export class AppComponent implements OnInit, OnDestroy {
   title = 'game-reviews';
   desktopWidth = 900;
-  darkMode = false
+  darkMode = false;
 
-  private popupOpenSubscription!: Subscription;
-  private popupCloseSubscription!: Subscription;
-  private initializingSubscription!: Subscription;
-  private initializedSubscription!: Subscription;
-  private initializationErrorSubscription!: Subscription;
-  private statusChangeSubscription!: Subscription;
-  private revokeChoiceSubscription!: Subscription;
-  private noCookieLawSubscription!: Subscription;
+  private titleSub!: Subscription;
 
-  constructor(private desktopModeService: DesktopModeService, private themeService: ThemeService, private translate: TranslateService, private cookieService: CookieServiceWrapperService, private ccService: NgcCookieConsentService){
-  }
+  constructor(
+    private desktopModeService: DesktopModeService,
+    private themeService: ThemeService,
+    private translate: TranslateService,
+    private cookieService: CookieServiceWrapperService,
+    private ccService: NgcCookieConsentService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title
+  ) {}
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.translate.addLangs(['en-GB', 'de-DE']);
     this.translate.setDefaultLang('en-GB');
-    this.themeService.getDarkMode().subscribe(darkMode => this.darkMode = darkMode)
-    let cookieLanguage = this.cookieService.get("language")
-    if(cookieLanguage != ""){
-      this.translate.use(cookieLanguage)
-    }
-    else{
-      this.translate.use(this.translate.defaultLang)
+    this.themeService
+      .getDarkMode()
+      .subscribe((darkMode) => (this.darkMode = darkMode));
+    let cookieLanguage = this.cookieService.get('language');
+    if (cookieLanguage != '') {
+      this.translate.use(cookieLanguage);
+    } else {
+      this.translate.use(this.translate.defaultLang);
     }
     //this.cookieService.deleteAll()
-    this.setCookieConsentPopupLabels()
+    this.setCookieConsentPopupLabels();
 
-    this.statusChangeSubscription = this.ccService.statusChange$.subscribe(
-      (event: NgcStatusChangeEvent) => {
-        console.log(event.status)
-        if(event.status == "allow"){
-          this.cookieService.setCookieConsent(true)
+    this.ccService.statusChange$
+      .pipe(untilDestroyed(this))
+      .subscribe((event: NgcStatusChangeEvent) => {
+        console.log(event.status);
+        if (event.status == 'allow') {
+          this.cookieService.setCookieConsent(true);
+        } else {
+          this.cookieService.setCookieConsent(false);
+          this.cookieService.deleteAll();
         }
-        else{
-          this.cookieService.setCookieConsent(false)
-          this.cookieService.deleteAll()
-        }
+      });
+
+    this.titleChangeOnRouteSubscribe();
+  }
+
+  titleChangeOnRouteSubscribe() {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        var rt = this.getChild(this.activatedRoute);
+
+        rt.data
+          .pipe(untilDestroyed(this))
+          .subscribe((data: { title: string }) => {
+            if (data.title != undefined) {
+              this.subscribeToTitleTranslation(data.title);
+            }
+          });
       });
   }
 
-  ngAfterViewInit(): void{
-    this.checkDesktopMode()
+  subscribeToTitleTranslation(title: string) {
+    this.unsubscribeTitle();
+    this.titleSub = this.translate
+      .stream(title)
+      .pipe(untilDestroyed(this))
+      .subscribe((title) => {
+        this.titleService.setTitle(title);
+      });
   }
 
-  setCookieConsentPopupLabels(){
-    this.translate//
-      .stream(['cookie.header', 'cookie.message', 'cookie.dismiss', 'cookie.allow', 'cookie.deny', 'cookie.link', 'cookie.policy']).pipe(untilDestroyed(this))
-      .subscribe(data => {
+  unsubscribeTitle() {
+    if (this.titleSub != undefined) {
+      this.titleSub.unsubscribe();
+    }
+  }
 
-        this.ccService.getConfig().content = this.ccService.getConfig().content || {} ;
+  ngAfterViewInit(): void {
+    this.checkDesktopMode();
+  }
+
+  setCookieConsentPopupLabels() {
+    this.translate //
+      .stream([
+        'cookie.header',
+        'cookie.message',
+        'cookie.dismiss',
+        'cookie.allow',
+        'cookie.deny',
+        'cookie.link',
+        'cookie.policy',
+      ])
+      .pipe(untilDestroyed(this))
+      .subscribe((data) => {
+        this.ccService.getConfig().content =
+          this.ccService.getConfig().content || {};
         // Override default messages with the translated ones
         this.ccService.getConfig().content!.header = data['cookie.header'];
         this.ccService.getConfig().content!.message = data['cookie.message'];
@@ -83,26 +134,24 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   onResize(event: any) {
-    this.checkDesktopMode()
+    this.checkDesktopMode();
   }
 
-  checkDesktopMode(): void{
-    if(window.innerWidth > this.desktopWidth){
-      this.desktopModeService.setDesktopModeStatus(true)
-    }
-    else{
-      this.desktopModeService.setDesktopModeStatus(false)
+  checkDesktopMode(): void {
+    if (window.innerWidth > this.desktopWidth) {
+      this.desktopModeService.setDesktopModeStatus(true);
+    } else {
+      this.desktopModeService.setDesktopModeStatus(false);
     }
   }
 
-  ngOnDestroy(): void {
-    this.popupOpenSubscription.unsubscribe();
-    this.popupCloseSubscription.unsubscribe();
-    this.initializingSubscription.unsubscribe();
-    this.initializedSubscription.unsubscribe();
-    this.initializationErrorSubscription.unsubscribe();
-    this.statusChangeSubscription.unsubscribe();
-    this.revokeChoiceSubscription.unsubscribe();
-    this.noCookieLawSubscription.unsubscribe();
+  getChild(activatedRoute: ActivatedRoute): any {
+    if (activatedRoute.firstChild) {
+      return this.getChild(activatedRoute.firstChild);
+    } else {
+      return activatedRoute;
+    }
   }
+
+  ngOnDestroy(): void {}
 }
