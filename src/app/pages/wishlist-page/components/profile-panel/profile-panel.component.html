@@ -4,7 +4,7 @@
       <img
         class="logout-icon"
         [ngClass]="darkMode ? 'inverted' : ''"
-        src="../../../assets/icons/login.png"
+        src="../../../assets/icons/logout.png"
         (click)="authService.SignOut()"
       />
     </div>
@@ -24,6 +24,12 @@
             ? ("wishlist.verified-true" | translate)
             : ("wishlist.verified-false" | translate))
       }}
+      <span
+        *ngIf="!authService.userData.emailVerified"
+        class="verify-email"
+        (click)="authService.SendVerificationMail()"
+        >{{ "user.verify-email" | translate }}</span
+      >
     </div>
   </div>
 </div>

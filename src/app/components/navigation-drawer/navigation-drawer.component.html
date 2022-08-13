@@ -12,7 +12,11 @@
         <div class="drawer-destination" (click)="backButton()">
           <mat-icon>keyboard_backspace</mat-icon>
         </div>
-        <div class="drawer-destination" (click)="onFavouriteClick()">
+        <div
+          *ngIf="authService.isLoggedIn"
+          class="drawer-destination"
+          (click)="onFavouriteClick()"
+        >
           <mat-icon *ngIf="!favourite">star_border</mat-icon>
           <mat-icon *ngIf="favourite">star</mat-icon>
         </div>
@@ -40,7 +44,7 @@
           />
         </div>
         <ng-template #loginButton>
-          <div class="drawer-destination profile-img">
+          <div class="drawer-destination">
             <img
               class="icon"
               [ngClass]="darkMode ? 'inverted' : ''"

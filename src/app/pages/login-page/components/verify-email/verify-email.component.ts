@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-verify-email',
   templateUrl: './verify-email.component.html',
-  styleUrls: ['./verify-email.component.scss']
+  styleUrls: ['./verify-email.component.scss'],
 })
 export class VerifyEmailComponent implements OnInit {
+  constructor(public authService: AuthService, private location: Location) {}
 
-  constructor(public authService: AuthService) { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  backButton() {
+    this.location.back();
   }
-
 }

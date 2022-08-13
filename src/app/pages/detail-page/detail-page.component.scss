@@ -1,92 +1,93 @@
-.gallery-selector{
-    display: inline-flex;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    width: 100%;
+.gallery-selector {
+  display: inline-flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  width: 100%;
 }
 
-.screenshot{
-    width: 20%;
-    margin-right: 5px;
-    border: 2px solid transparent
+.screenshot {
+  width: 20%;
+  margin-right: 5px;
+  border: 2px solid transparent;
 }
 
-.screenshot:last-child{
-    margin-right: 0;
+.screenshot:last-child {
+  margin-right: 0;
 }
 
-.screenshot.selected{
-    border: 2px solid blue
+.screenshot.selected {
+  border: 2px solid blue;
 }
 
-.outer-selected{
-    position: relative;
-    width: 100%;
-    overflow-x: hidden;
+.outer-selected {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.inner-selected{
-    display: inline-flex;
-    width: 100%;
-    transition: 0.5s margin-left;
+.inner-selected {
+  display: inline-flex;
+  display: block ruby;
+  width: 100%;
+  transition: 0.5s margin-left;
 }
 
-.big-screenshot{
-    width: 100%;
-    //width: 55vw;
+.big-screenshot {
+  width: 100%;
+  //width: 55vw;
 }
 
-.description{
-    padding: 15px;
-    width: 90%;
-    margin: auto;
-    text-overflow: ellipsis;
+.description {
+  padding: 15px;
+  width: 90%;
+  margin: auto;
+  text-overflow: ellipsis;
 }
 
-.highlight{
-    display: flex;
-    //justify-content: center;
-    align-items: stretch;
-    gap: 10px;
-    padding-top: 10px;
-    width: 70%;
-    min-width: 750px;
-    margin: auto;
+.highlight {
+  display: flex;
+  //justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  padding-top: 10px;
+  width: 70%;
+  min-width: 750px;
+  margin: auto;
 }
 
-.gallery{
-    width: 60%;
-    //flex-grow: 2;
+.gallery {
+  width: 60%;
+  //flex-grow: 2;
 }
 
-.short-description{
-    width: 40%;
-    padding: 0px;
-    margin: 0px;
-    //flex-grow: 1;
+.short-description {
+  width: 40%;
+  padding: 0px;
+  margin: 0px;
+  //flex-grow: 1;
 }
 
-.short-description-text{
-    padding: 10px;
+.short-description-text {
+  padding: 10px;
 }
 
-img.big-screenshot{
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
-    user-drag: none;
+img.big-screenshot {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
-img.header{
-    width: 100%;
+img.header {
+  width: 100%;
 }
 
-img{
-    //max-width: 100%;
+img {
+  //max-width: 100%;
 }
 
-a{
+a {
   overflow-wrap: break-word;
   word-wrap: break-word;
 
@@ -101,119 +102,118 @@ a{
   color: var(--text-color);
 }
 
-.detail-card{
-    border-radius: 5px;
-    padding: 10px;
-    background-color: var(--accent-color);
-    margin-bottom: 10px;
+.detail-card {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: var(--accent-color);
+  margin-bottom: 10px;
 }
 
-.description{
-    width: 70%;
-    min-width: 750px;
+.description {
+  width: 70%;
+  min-width: 750px;
 }
 
-.developers{
-    margin-top: 10px;
+.developers {
+  margin-top: 10px;
 }
 
-.description.detail-card img{
-    display: block;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+.description.detail-card img {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.button{
-    display: block;
-    margin-left: auto;
-    margin-right: 0;
-    width: 50px;
+.button {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  width: 50px;
 }
 
-.button img{
-    width: 50px;
+.button img {
+  width: 50px;
 }
 
-.pc-requirements-content{
-    width: 100%;
-    display: inline-flex;
-    flex-wrap: wrap;
+.pc-requirements-content {
+  width: 100%;
+  display: inline-flex;
+  flex-wrap: wrap;
 }
 
-.pc-requirements{
-    width: 70%;
-    min-width: 750px;
-    margin: auto;
-    overflow-wrap: break-word;
+.pc-requirements {
+  width: 70%;
+  min-width: 750px;
+  margin: auto;
+  overflow-wrap: break-word;
+  margin-bottom: 300px;
 }
-
 
 @media only screen and (max-width: 900px) {
-    .highlight{
-        display: block;
-        width: 90%;
-        min-width: 0px;
-    }
-    .gallery{
-        margin: auto;
-        width: 100%;
-    }
-    .short-description{
-        margin: auto;
-        width: 90%;
-    }
-    .description{
-        width: 90%;
-        min-width: 0px;
-    }
-    .pc-requirements{
-        width: 90%;
-        min-width: 0px;
-    }
-    .detail-card{
-        margin-bottom: 10px;
-    }
-    .pc-requirements div{
-        width: 100%;
-    }
+  .highlight {
+    display: block;
+    width: 90%;
+    min-width: 0px;
+  }
+  .gallery {
+    margin: auto;
+    width: 100%;
+  }
+  .short-description {
+    margin: auto;
+    width: 90%;
+  }
+  .description {
+    width: 90%;
+    min-width: 0px;
+  }
+  .pc-requirements {
+    width: 90%;
+    min-width: 0px;
+  }
+  .detail-card {
+    margin-bottom: 10px;
+  }
+  .pc-requirements div {
+    width: 100%;
+  }
 }
 
 //loading animation
 .lds-ring {
-    display: block;
-    margin: auto;
-    position: relative;
-    width: 80px;
-    height: 80px;
+  display: block;
+  margin: auto;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid var(--text-color);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: var(--text-color) transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
   }
-  .lds-ring div {
-    box-sizing: border-box;
-    display: block;
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 8px solid var(--text-color);
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: var(--text-color) transparent transparent transparent;
+  100% {
+    transform: rotate(360deg);
   }
-  .lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
-  }
-  .lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
-  }
-  .lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
-  }
-  @keyframes lds-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
+}

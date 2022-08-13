@@ -1,1 +1,22 @@
-<p>verify-email works!</p>
+<div class="center">
+  <div class="card">
+    <div>
+      <h1>{{ "user.verify-email" | translate }}</h1>
+    </div>
+    <p>
+      {{ "user.send-confirm" | translate }}
+      <strong>{{ authService.userData.email }}</strong
+      >.
+    </p>
+    <p>{{ "user.check-email" | translate }}</p>
+    <input
+      type="button"
+      class="form-button"
+      [value]="'user.resend-email' | translate"
+      (click)="authService.SendVerificationMail()"
+    />
+    <button class="form-button" (click)="backButton()">
+      {{ "user.back" | translate }}
+    </button>
+  </div>
+</div>
