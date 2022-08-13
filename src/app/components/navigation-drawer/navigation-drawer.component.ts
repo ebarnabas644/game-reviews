@@ -12,7 +12,7 @@ import { DesktopModeService } from 'src/app/services/desktop-mode.service';
 import { NavigationDrawerService } from 'src/app/services/navigation-drawer.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Location } from '@angular/common';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CookieServiceWrapperService } from 'src/app/services/cookie-service-wrapper.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
