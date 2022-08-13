@@ -1,14 +1,17 @@
 .gallery-selector {
   display: inline-flex;
+  display: block ruby;
   overflow-y: hidden;
   overflow-x: scroll;
   width: 100%;
+  height: 20%;
 }
 
 .screenshot {
   width: 20%;
   margin-right: 5px;
   border: 2px solid transparent;
+  height: 95%;
 }
 
 .screenshot:last-child {
@@ -22,6 +25,7 @@
 .outer-selected {
   position: relative;
   width: 100%;
+  height: 80%;
   overflow-x: hidden;
 }
 
@@ -29,11 +33,13 @@
   display: inline-flex;
   display: block ruby;
   width: 100%;
+  height: 98%;
   transition: 0.5s margin-left;
 }
 
 .big-screenshot {
   width: 100%;
+  height: 100%;
   //width: 55vw;
 }
 
