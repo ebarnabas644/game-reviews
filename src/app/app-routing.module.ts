@@ -48,6 +48,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { title: 'toolbar.wishlist' },
   },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
