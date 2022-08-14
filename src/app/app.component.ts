@@ -68,6 +68,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   titleChangeOnRouteSubscribe() {
+    //https://www.tektutorialshub.com/angular/dynamic-page-title-based-on-route-in-angular/
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .pipe(untilDestroyed(this))
