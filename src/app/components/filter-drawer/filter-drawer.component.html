@@ -1,14 +1,21 @@
 <mat-drawer-container class="container" [hasBackdrop]="!desktopMode">
-    <mat-drawer class="full-drawer" #drawer mode="side" position="end" [opened]="desktopMode">
-      <div class="drawer">
-        <h2 class="title">{{'filter.options' | translate}}</h2>
-        <app-genre-selector></app-genre-selector>
-        <app-category-selector></app-category-selector>
-        <app-operating-system-selector [darkMode]="darkMode"></app-operating-system-selector>
+  <mat-drawer
+    class="full-drawer"
+    #drawer
+    mode="side"
+    position="end"
+    [opened]="desktopMode"
+  >
+    <div class="drawer">
+      <h2 class="title">{{ "filter.options" | translate }}</h2>
+      <app-genre-selector></app-genre-selector>
+      <app-category-selector></app-category-selector>
+      <app-operating-system-selector
+        [darkMode]="darkMode"
+      ></app-operating-system-selector>
     </div>
-    </mat-drawer>
-      <mat-drawer-content class="content">
-          <ng-content></ng-content>
-      </mat-drawer-content>
-  </mat-drawer-container>
-  
+  </mat-drawer>
+  <mat-drawer-content class="content">
+    <ng-content></ng-content>
+  </mat-drawer-content>
+</mat-drawer-container>
