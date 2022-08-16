@@ -1,30 +1,32 @@
 <mat-list-item>
   <div *ngFor="let game of games" class="content">
-    <a routerLink="/search/{{game.steam_appid}}">
+    <a (click)="onGameClick(game.steam_appid)">
       <div class="card">
         <div class="card-image">
-          <img src="{{game.header_image}}" class="image">
+          <img src="{{ game.header_image }}" class="image" />
         </div>
         <div class="card-text">
           <div class="text">
-            <span *ngIf="!game.coming_soon else comingSoon">{{game.date}}</span>
+            <span *ngIf="!game.coming_soon; else comingSoon">{{
+              game.date
+            }}</span>
             <ng-template #comingSoon>
               <span>Coming soon</span>
             </ng-template>
-            <h2 class="title">{{game.name}}</h2>
+            <h2 class="title">{{ game.name }}</h2>
           </div>
         </div>
         <div class="card-stats">
           <div class="stat" *ngIf="game.recommendations">
-            <div class="value">{{game.recommendations}}</div>
+            <div class="value">{{ game.recommendations }}</div>
             <div class="type"><mat-icon>thumb_up_alt</mat-icon></div>
           </div>
           <div class="stat" *ngIf="game.metacritic_score">
-            <div class="value">{{game.metacritic_score}}</div>
+            <div class="value">{{ game.metacritic_score }}</div>
             <div class="type"><mat-icon>star</mat-icon></div>
           </div>
           <div class="stat" *ngIf="game.required_age">
-            <div class="value">{{game.required_age}}</div>
+            <div class="value">{{ game.required_age }}</div>
             <div class="type"><mat-icon>add</mat-icon></div>
           </div>
         </div>
@@ -32,4 +34,3 @@
     </a>
   </div>
 </mat-list-item>
-
