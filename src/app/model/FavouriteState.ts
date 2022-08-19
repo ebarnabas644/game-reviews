@@ -1,3 +1,3 @@
-export interface FavouriteState{
-    found: boolean
-  }
+export interface FavouriteState {
+  found: boolean;
+}
